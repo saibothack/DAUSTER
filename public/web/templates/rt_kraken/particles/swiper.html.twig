@@ -1,0 +1,69 @@
+{% extends '@nucleus/partials/particle.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.0.7/css/swiper.min.css">
+{% endblock %}
+
+{% block javascript %}
+<script src="{{ url('gantry-theme://js/swiper.js') }}"></script>
+{% endblock %}
+
+{% block particle %}
+
+<div class="{{ particle.class|e }}">
+	{% if particle.title %}<h2 class="g-title">{{ particle.title|raw }}</h2>{% endif %}
+
+    <div class="g-swiper">
+    	<div class="swiper-container {{ particle.layout|e }} {{ particle.layout|e }}-{{ particle.elementID|e }}" {% if particle.layout == "g-horizontal-slides" or particle.layout == "g-vertical-slides" %}style="height: {{ particle.elementHeight|e }};"{% endif %}>
+    		<div class="swiper-wrapper">
+		        {% for item in particle.items %}
+		            <div class="swiper-slide">
+						<div class="swiper-slide-content">
+			            	{% if item.image %}
+			            	<div class="swiper-slide-content-image">
+			            		<img src="{{ url(item.image)|e }}" alt="{{ item.title|raw }}">
+			            	</div>
+			            	{% endif %}			
+			            	<div class="swiper-slide-content-text">
+								{% if item.subtitle %}<div class="g-swiper-slide-content-subtitle">{{ item.subtitle|raw }}</div>{% endif %}
+			            		{% if item.title %}<div class="g-swiper-slide-content-title">{{ item.title|raw }}</div>{% endif %}
+								{% if item.desc %}<div class="g-swiper-slide-content-desc">{{ item.desc|raw }}</div>{% endif %}		
+								{% if item.link %}<a class="g-swiper-slide-content-link button" href="{{ item.link|e }}">{{ item.linktext|raw }}</a>{% endif %}			            		
+			            	</div>			
+					</div>
+				</div>	
+		        {% endfor %}
+		    </div>
+		    {% if particle.layout == "g-horizontal-slides" or particle.layout == "g-vertical-slides" %}
+		    <div class="swiper-pagination {{ particle.layout|e }}-pagination {{ particle.layout|e }}-pagination-{{ particle.elementID|e }}"></div>
+		    {% elseif particle.layout == "g-carousel" %}
+	        <div class="swiper-button-next {{ particle.layout|e }}-button-next {{ particle.layout|e }}-button-next-{{ particle.elementID|e }}"><i class="fa fa-2x fa-arrow-circle-right"></i></div>
+	        <div class="swiper-button-prev {{ particle.layout|e }}-button-prev {{ particle.layout|e }}-button-prev-{{ particle.elementID|e }}"><i class="fa fa-2x fa-arrow-circle-left"></i></div>	
+	        {% endif %}	    
+		</div>			
+	</div>	
+</div> 
+
+<script>
+new Swiper('.g-horizontal-slides-{{ particle.elementID|e }}', {
+    pagination: '.g-horizontal-slides-pagination-{{ particle.elementID|e }}',
+    paginationClickable: true,   
+    loop: true
+});
+new Swiper('.g-vertical-slides-{{ particle.elementID|e }}', {
+    pagination: '.g-vertical-slides-pagination-{{ particle.elementID|e }}',
+    paginationClickable: true,
+    direction: 'vertical',       
+    loop: true
+});
+new Swiper('.g-carousel-{{ particle.elementID|e }}', {
+    pagination: '.g-carousel-pagination-{{ particle.elementID|e }}',
+    paginationClickable: true,
+    slidesPerView: {{ particle.slidesPerView|default(2) }},	 
+    spaceBetween: 30,
+    nextButton: '.g-carousel-button-next-{{ particle.elementID|e }}',
+    prevButton: '.g-carousel-button-prev-{{ particle.elementID|e }}',	 	        
+    loop: true
+});
+</script> 
+{% endblock %}
