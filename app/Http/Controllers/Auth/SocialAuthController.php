@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Mail\SendEmail;
 
 class SocialAuthController extends Controller
 {
@@ -37,8 +38,13 @@ class SocialAuthController extends Controller
      */
     public function findOrCreateUser($user, $provider)
     {
+
+        $data['view'] = 'mail.welcome';
+        $data = ['message' => 'This is a test!'];
+
+        Mail::to('john@example.com')->send(new SendEmail($data));
      
-        $authUser = User::where('provider_id', $user->id)->first();
+        /*$authUser = User::where('provider_id', $user->id)->first();
         if ($authUser) {
             return $authUser;
         }
@@ -61,7 +67,7 @@ class SocialAuthController extends Controller
 
         $authUser->assignRole('Cliente');
 
-        return $authUser;
+        return $authUser;*/
     }
     // Login y redirección
     public function authAndRedirect($user)
