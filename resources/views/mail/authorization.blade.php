@@ -13,19 +13,19 @@
 
 <body>
 <div class="container">
-    <header style="background-image: url('{{ asset('images/mail/bk_welcome.png') }}'); background-repeat: no-repeat; background-size: cover; height: 210px !important; background-position: center">
+    <header style="background-image: url('{{ asset('images/mail/bk_authorization.png') }}'); background-repeat: no-repeat; background-size: cover; height: 210px !important; background-position: center">
         <img src="{{ asset('images/mail/ic_logo.png') }}" alt="" style="height: 200px !important; display: block; margin: 0 auto;">
     </header>
     <br>
     <div class="row">
         <div class="col-md-12 text-center">
-            <h3 style="font-size: 20px"><strong>¡Nos alegra que estés aquí!</strong></h3>
+            <h3 style="font-size: 20px"><strong>¡Bienvenido a la familia Dauster!</strong></h3>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-12 text-center" style="font-size: 14px">
-            <p>Gracias por formar parte de <b>Dauster</b>, estás a punto de enviar y agilizar tus entregas en la ciudad. Con nuestro equipo tus entregas se adaptan a tus necesidades. Olvídate de los inconvenientes.</p>
+            <p>Dauster te da la bienvenida a la flotilla y al equipo, estás listo para activarte y realizar entregas en la ciudad. Rueda por la ciudad y espera los pedidos en tu aplicación móvil. Estamos para apoyarte y con los problemas que surjan mientras realizas un pedido. Genera ganancias y ayuda a las personas con sus pedidos.</p>
         </div>
     </div>
     <br>
@@ -39,20 +39,25 @@
     <br>
     <div class="row">
         <div class="col-md-12 text-center">
-            <h3 style="font-size: 20px"><strong>Funciones que mejorarán tu vida.</strong></h3>
+            <h3 style="font-size: 20px"><strong>Mensajero Dauster.</strong></h3>
         </div>
         <div class="col-md-12 text-center">
-            <p>Herramientas que ofrece la plataforma online y móviles.</p>
+            <p>Recuerda al utilizar la plataforma Dauster.</p>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6 offset-md-3">
+        <div class="offset-1 col-4">
             <ul>
-                <li>Entregas en el menor tiempo posible.</li>
-                <li>Comunicación con el mensajero.</li>
-                <li>Compras de cualquier lugar.</li>
-                <li>Facturación inmediata.</li>
-                <li>Agenda de envíos.</li>
+                <li>Hay diferentes tipos de pedidos (recoger y entregar o comprar y entregar).</li>
+                <li>Ganas más cuando los pedidos tienen más de 1 dirección y la distancia se prolonga.</li>
+                <li>Comunícate con el cliente en caso de ser necesario o tengas dudas.</li>
+            </ul>
+        </div>
+        <div class="offset-2 col-4">
+            <ul>
+                <li>Pago semanal.</li>
+                <li>Llegar más rápido al destino puede significar propina para ti.</li>
+                <li>Verificar el pedido, confirmar con el cliente para evitar fraudes.</li>
             </ul>
         </div>
     </div>
@@ -65,13 +70,8 @@
                             <h4 style="font-size: 11px"><strong>Datos de la cuenta:</strong></h4>
                         </div>
                         <div class="col-md-12">
-                            <label>Dirección asociada a tu cuenta: {{ $data['mail']  }}</label>
+                            <label>Dirección asociada a tu cuenta:</label>
                         </div>
-                        @if (isset($data['url']))
-                            <div class="col-md-12">
-                                <label>Validar correo: <a href="{{ $data['url']  }}">Confirmar!</a></label>
-                            </div>
-                        @endif
                     </div>
                 </div>
             </div>
@@ -80,7 +80,7 @@
     <br>
     <div class="row">
         <div class="col-md-12 text-center">
-            <h3 style="font-size: 20px"><strong>¡Estamos para ayudarte!</strong></h3>
+            <h3 style="font-size: 20px"><strong>¡Bienvenido al equipo, Dauster espera apoyarnos mutuamente y crecer juntos!</strong></h3>
         </div>
     </div>
     <br>

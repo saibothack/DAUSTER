@@ -13,19 +13,19 @@
 
 <body>
 <div class="container">
-    <header style="background-image: url('{{ asset('images/mail/bk_welcome.png') }}'); background-repeat: no-repeat; background-size: cover; height: 210px !important; background-position: center">
+    <header style="background-image: url('{{ asset('images/mail/bk_welcome_company.png') }}'); background-repeat: no-repeat; background-size: cover; height: 210px !important; background-position: center">
         <img src="{{ asset('images/mail/ic_logo.png') }}" alt="" style="height: 200px !important; display: block; margin: 0 auto;">
     </header>
     <br>
     <div class="row">
         <div class="col-md-12 text-center">
-            <h3 style="font-size: 20px"><strong>¡Nos alegra que estés aquí!</strong></h3>
+            <h3 style="font-size: 20px"><strong>¡Bienvenido a la plataforma!</strong></h3>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-12 text-center" style="font-size: 14px">
-            <p>Gracias por formar parte de <b>Dauster</b>, estás a punto de enviar y agilizar tus entregas en la ciudad. Con nuestro equipo tus entregas se adaptan a tus necesidades. Olvídate de los inconvenientes.</p>
+            <p>Gracias por permitir que <strong>Dauster</strong> forme parte de su empresa, está a un paso de agilizar entregas a sus clientes en la ciudad. Con nuestro equipo y plataforma podrá realizar entregas personalizadas a las necesidades de su negocio o empresa. El tiempo ya no será un problema.</p>
         </div>
     </div>
     <br>
@@ -39,7 +39,7 @@
     <br>
     <div class="row">
         <div class="col-md-12 text-center">
-            <h3 style="font-size: 20px"><strong>Funciones que mejorarán tu vida.</strong></h3>
+            <h3 style="font-size: 20px"><strong>Funciones que mejorarán tu negocio.</strong></h3>
         </div>
         <div class="col-md-12 text-center">
             <p>Herramientas que ofrece la plataforma online y móviles.</p>
@@ -50,9 +50,9 @@
             <ul>
                 <li>Entregas en el menor tiempo posible.</li>
                 <li>Comunicación con el mensajero.</li>
-                <li>Compras de cualquier lugar.</li>
+                <li>Compras de cualquier lugar de la ciudad.</li>
                 <li>Facturación inmediata.</li>
-                <li>Agenda de envíos.</li>
+                <li>Agendar envíos o pedidos.</li>
             </ul>
         </div>
     </div>
@@ -80,7 +80,7 @@
     <br>
     <div class="row">
         <div class="col-md-12 text-center">
-            <h3 style="font-size: 20px"><strong>¡Estamos para ayudarte!</strong></h3>
+            <h3 style="font-size: 20px"><strong>¡Estamos para apoyar a tu negocio!</strong></h3>
         </div>
     </div>
     <br>

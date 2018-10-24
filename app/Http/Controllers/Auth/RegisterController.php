@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Mail;
 use App\User;
+use App\Mail\sendMail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -49,9 +51,13 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
+            'kindPerson' => 'required|int',
             'name' => 'required|string|max:255',
+            'surnames' => 'required|string|max:255',
+            'birthday' => 'required|date',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'phone' => 'required|string|tel',
+            'password' => 'required|string|min:6|confirmed'
         ]);
     }
 
@@ -63,10 +69,31 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        $user = User::create($data->only('kindPerson', 'name', 'surnames', 'birthday', 'email', 'phone', 'password'));
+
+        $data = array();
+
+        if($data['kindPerson'] == 1) {
+            $data = array(
+                'view' => 'mail.welcome',
+                'mail' => $user->email,
+                'name' => $user->name,
+                'url' => $user->name,
+                'subject' => 'Registro de usuarios'
+            );
+        } else if($data['kindPerson'] == 2) {
+            $data = array(
+                'view' => 'mail.welcome_company',
+                'mail' => $user->email,
+                'name' => $user->name,
+                'url' => $user->name,
+                'subject' => 'Registro de Empresa'
+            );
+
+        }
+
+        Mail::to($data['mail'])->send(new sendMail($data));
+
+        return $user;
     }
 }

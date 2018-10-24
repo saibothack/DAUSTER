@@ -13,19 +13,19 @@
 
 <body>
 <div class="container">
-    <header style="background-image: url('{{ asset('images/mail/bk_welcome.png') }}'); background-repeat: no-repeat; background-size: cover; height: 210px !important; background-position: center">
+    <header style="background-image: url('{{ asset('images/mail/bk_welcome_drive.png') }}'); background-repeat: no-repeat; background-size: cover; height: 210px !important; background-position: center">
         <img src="{{ asset('images/mail/ic_logo.png') }}" alt="" style="height: 200px !important; display: block; margin: 0 auto;">
     </header>
     <br>
     <div class="row">
         <div class="col-md-12 text-center">
-            <h3 style="font-size: 20px"><strong>¡Nos alegra que estés aquí!</strong></h3>
+            <h3 style="font-size: 20px"><strong>¡Bienvenido a la flotilla Dauster!</strong></h3>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-12 text-center" style="font-size: 14px">
-            <p>Gracias por formar parte de <b>Dauster</b>, estás a punto de enviar y agilizar tus entregas en la ciudad. Con nuestro equipo tus entregas se adaptan a tus necesidades. Olvídate de los inconvenientes.</p>
+            <p>El equipo <strong>Dauster te da la mas cordial bienvenida para formar parte de nuestra flotilla</strong>, estás a un paso de ayudar a personas y empresas con sus entregas en la ciudad. Con nuestra plataforma podrás realizar entregas y pedidos sin horario de conexión y con la cobertura que te permitirá rodar por la mayor parte de la ciudad. Genera ganancias con cada pedido.</p>
         </div>
     </div>
     <br>
@@ -39,20 +39,26 @@
     <br>
     <div class="row">
         <div class="col-md-12 text-center">
-            <h3 style="font-size: 20px"><strong>Funciones que mejorarán tu vida.</strong></h3>
+            <h3 style="font-size: 20px"><strong>Obtén ganancias pedido a pedido.</strong></h3>
         </div>
         <div class="col-md-12 text-center">
-            <p>Herramientas que ofrece la plataforma online y móviles.</p>
+            <p>Beneficios de utilizar la plataforma Dauster.</p>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6 offset-md-3">
+        <div class="offset-md-1 col-md-4">
             <ul>
-                <li>Entregas en el menor tiempo posible.</li>
-                <li>Comunicación con el mensajero.</li>
-                <li>Compras de cualquier lugar.</li>
-                <li>Facturación inmediata.</li>
-                <li>Agenda de envíos.</li>
+                <li>Cobertura por la mayor parte de la ciudad.</li>
+                <li>Facilidad de aceptación de pedidos.</li>
+                <li>Comunicación con el cliente.</li>
+                <li>Tarifa dinámica (gana más a mayor distancia).</li>
+            </ul>
+        </div>
+        <div class="offset-md-2 col-md-4">
+            <ul>
+                <li>Sin horario laboral.</li>
+                <li>Ganancias semanales.</li>
+                <li>Dispersiones para la compra de productos.</li>
             </ul>
         </div>
     </div>
@@ -80,7 +86,10 @@
     <br>
     <div class="row">
         <div class="col-md-12 text-center">
-            <h3 style="font-size: 20px"><strong>¡Estamos para ayudarte!</strong></h3>
+            <h3 style="font-size: 20px"><strong>¡Nos encantaría que formes parte del equipo!</strong></h3>
+        </div>
+        <div class="col-md-12">
+            <p>Después de la validar tu correo, procederemos a ver tu registro en caso de ser aceptado recibirás un nuevo correo con el cual podrás asistir a las oficinas para llevar tu documentación que te permitirá estar dado de alta en la plataforma y empezar a trabajar con nosotros. <strong>Recuerda llevar tu identificación IFE/INE, tarjeta de circulación de tu vehículo, licencia de conducir, hoja que acredite tu RFC y carta de antecedentes no penales.</strong></p>
         </div>
     </div>
     <br>
@@ -116,4 +125,3 @@
 </div>
 </body>
 </html>
-

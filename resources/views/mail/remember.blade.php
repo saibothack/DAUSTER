@@ -13,76 +13,50 @@
 
 <body>
 <div class="container">
-    <header style="background-image: url('{{ asset('images/mail/bk_welcome.png') }}'); background-repeat: no-repeat; background-size: cover; height: 210px !important; background-position: center">
+    <header style="background-image: url('{{ asset('images/mail/bk_remember.png') }}'); background-repeat: no-repeat; background-size: cover; height: 210px !important; background-position: center">
         <img src="{{ asset('images/mail/ic_logo.png') }}" alt="" style="height: 200px !important; display: block; margin: 0 auto;">
     </header>
     <br>
     <div class="row">
         <div class="col-md-12 text-center">
-            <h3 style="font-size: 20px"><strong>¡Nos alegra que estés aquí!</strong></h3>
+            <h3 style="font-size: 20px"><strong>¡Recupera tu contraseña y accede de forma segura a tu cuenta!</strong></h3>
+        </div>
+        <div class="col-12">
+            <label>Estimado/a (nombre del usuario):</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center" style="font-size: 14px">
+            <p>Has solicitado reestablecer tu contraseña, para completar el proceso da clic en el siguiente enlace.</p>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <a href="#" class="btn btn-primary">Cambio de contraseña</a>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <p>Si no realizaste esta modificación o si crees que alguien ha accedido a tu cuenta sin autorización, reestablece tu contraseña inmediatamente para evitar cualquier práctica que atente contra tu seguridad y la de terceros. Recuerda no solicitar muchos cambios de contraseña para evitar que nuestro soporte no detecte una anomalía con tu cuenta.</p>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-12 text-left">
+            <p>Gracias por utilizar nuestro servicio y seguir confiando en nosotros, un saludo.</p>
+        </div>
+        <div class="col-md-12 text-left">
+            <label>Atentamente:</label>
+        </div>
+        <div class="col-md-12 text-left">
+            <label>Soporte <strong>Dauster</strong></label>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-12 text-center" style="font-size: 14px">
-            <p>Gracias por formar parte de <b>Dauster</b>, estás a punto de enviar y agilizar tus entregas en la ciudad. Con nuestro equipo tus entregas se adaptan a tus necesidades. Olvídate de los inconvenientes.</p>
-        </div>
-    </div>
-    <br>
-    <br>
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <input type="button" value="Ir a Dauster" class="btn btn-primary">
-        </div>
-    </div>
-    <br>
-    <br>
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <h3 style="font-size: 20px"><strong>Funciones que mejorarán tu vida.</strong></h3>
-        </div>
-        <div class="col-md-12 text-center">
-            <p>Herramientas que ofrece la plataforma online y móviles.</p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <ul>
-                <li>Entregas en el menor tiempo posible.</li>
-                <li>Comunicación con el mensajero.</li>
-                <li>Compras de cualquier lugar.</li>
-                <li>Facturación inmediata.</li>
-                <li>Agenda de envíos.</li>
-            </ul>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6 offset-md-3"  style="border-width: 1px; border-radius: 25px; border-color: gray; border-style: solid">
-            <div class="row" style="margin: 10px">
-                <div class="col-md-12 text-center">
-                    <div class="row text-left" style="font-size: 11px">
-                        <div class="col-md-12">
-                            <h4 style="font-size: 11px"><strong>Datos de la cuenta:</strong></h4>
-                        </div>
-                        <div class="col-md-12">
-                            <label>Dirección asociada a tu cuenta: {{ $data['mail']  }}</label>
-                        </div>
-                        @if (isset($data['url']))
-                            <div class="col-md-12">
-                                <label>Validar correo: <a href="{{ $data['url']  }}">Confirmar!</a></label>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <h3 style="font-size: 20px"><strong>¡Estamos para ayudarte!</strong></h3>
-        </div>
-    </div>
     <br>
     <br>
     <div class="row" style="border-width: 1px; border-color: gray; border-style: solid">

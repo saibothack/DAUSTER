@@ -20,16 +20,15 @@ class sendMail extends Mailable
 
     public function build()
     {
-        $address = 'janeexampexample@example.com';
-        $subject = 'This is a demo!';
-        $name = 'Jane Doe';
 
-        return $this->view('emails.register')
-            ->from($address, $name)
-            ->cc($address, $name)
-            ->bcc($address, $name)
-            ->replyTo($address, $name)
-            ->subject($subject)
+        return $this->view($this->data['view'])
+            ->from($this->data['mail'], $this->data['name'])
+            ->cc($this->data['mail'], $this->data['name'])
+            ->bcc($this->data['mail'], $this->data['name'])
+            ->replyTo($this->data['mail'], $this->data['name'])
+            ->subject($this->data['subject'])
             ->with([ 'data' => $this->data ]);
+
+
     }
 }

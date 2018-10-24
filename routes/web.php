@@ -40,8 +40,8 @@ Route::post('/create-step-two','ServiceController@createStepTwo');
 
 Route::get('/terms','TermController@index')->name('terms');
 
-Route::get('auth/{provider}', 'Auth\AuthController@redirectToProvider');
-Route::get('auth/{provider}/callback', 'Auth\AuthController@handleProviderCallback');
+Route::get('auth/{provider}', 'Auth\SocialAuthController@redirectToProvider')->name('social.auth');
+Route::get('auth/{provider}/callback', 'Auth\SocialAuthController@handleProviderCallback');
 
 
 

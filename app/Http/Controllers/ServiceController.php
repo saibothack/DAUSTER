@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use Mail;
 use App\Charge;
 use App\Service;
 use App\Vehicle;
+use App\Mail\sendMail;
 use Illuminate\Http\Request;
 
 class ServiceController extends Controller

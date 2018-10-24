@@ -265,9 +265,9 @@ class DatabaseSeeder extends Seeder
         $data = array(
             'name' => 'Gad',
             'surnames' => 'Arenas',
-            'email' => 'garenas@sysware.com.mx',
+            'email' => 'garenas.1991@gmail.com',
             'password' => 'Sysware2016',
-            'email_confirmation' => 1,
+            'email_verified_at' => now(),
             'status' => 1,
             'authorized' => 1
         );

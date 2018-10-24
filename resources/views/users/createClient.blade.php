@@ -88,7 +88,8 @@
                                                         <div class="login-social">
                                                             <div>
                                                                 <a class="button btn-facebook icon-left" rel="nofollow"
-                                                                   style="color: white; background-color: #3B5998 !important; background-image: none !important; width: 209px !important;">
+                                                                   style="color: white; background-color: #3B5998 !important; background-image: none !important; width: 209px !important;" value=""
+                                                                   href="{{ route('social.auth', 'facebook') }}">
                                                                     <i class="fa fa-facebook fa-fw">
                                                                     </i>
                                                                     {{ __('Facebook') }}
@@ -97,7 +98,8 @@
                                                             <div>
                                                                 <a class="button btn-block btn-twitter icon-left"
                                                                    rel="nofollow"
-                                                                   style="color: white; background-color: #1DA1F2 !important; background-image: none !important; width: 209px !important;">
+                                                                   style="color: white; background-color: #1DA1F2 !important; background-image: none !important; width: 209px !important;"
+                                                                   href="{{ route('social.auth', 'twitter') }}">
                                                                     <i class="fa fa-twitter fa-fw">
                                                                     </i>
                                                                     {{ __('Twitter') }}
@@ -220,7 +222,7 @@
                                                         </div>
                                                         <div class="control-group">
                                                             <div class="control-label">
-                                                                <label for="phone" class="hasPopover required">
+                                                                <label for="password" class="hasPopover required">
                                                                     Contraseña
                                                                     <span class="star">&nbsp;*</span>
                                                                 </label>
@@ -232,7 +234,7 @@
                                                         </div>
                                                         <div class="control-group">
                                                             <div class="control-label">
-                                                                <label for="phone" class="hasPopover required">
+                                                                <label for="password_confirmation" class="hasPopover required">
                                                                     Confirmar
                                                                     <span class="star">&nbsp;*</span>
                                                                 </label>

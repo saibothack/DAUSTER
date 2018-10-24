@@ -10,7 +10,7 @@
         "anam/phantommagick": "^2.0",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "5.7.*",
-        "laravel/socialite": "^3.1",
+        "laravel/socialite": "^3.2",
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.7",
         "spatie/laravel-permission": "^2.17"

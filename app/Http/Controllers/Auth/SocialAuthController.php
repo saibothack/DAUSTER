@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Auth;
+use Mail;
+use App\User;
+use Socialite;
+use App\Mail\sendMail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -28,6 +33,7 @@ class SocialAuthController extends Controller
         Auth::login($authUser, true);
         return $this->authAndRedirect($authUser); // Login y redirección
     }
+
     /**
      * If a user has registered before using social auth, return the user
      * else, create a new user object.
@@ -37,7 +43,6 @@ class SocialAuthController extends Controller
      */
     public function findOrCreateUser($user, $provider)
     {
-     
         $authUser = User::where('provider_id', $user->id)->first();
         if ($authUser) {
             return $authUser;
@@ -55,17 +60,27 @@ class SocialAuthController extends Controller
             'provider' => $provider,
             'provider_id' => $user->id,
             'autorized' => 1,
-            'email_confirmation' => 0,
+            'email_verified_at' => now(),
             'status' => 1,
         ]);
 
         $authUser->assignRole('Cliente');
 
+        $data = array(
+            'view' => 'mail.welcome',
+            'mail' => $user->email,
+            'name' => $user->name,
+            'subject' => 'Registro de usuarios'
+        );
+
+        Mail::to($data['mail'])->send(new sendMail($data));
+
         return $authUser;
     }
+
     // Login y redirección
     public function authAndRedirect($user)
     {
-        return redirect()->to('/services');
+        return redirect()->to('/home');
     }
 }

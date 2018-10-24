@@ -31,10 +31,10 @@ class CreateUsersTable extends Migration
             $table->string('avatar')->nullable();
             $table->string('provider')->nullable();
             $table->string('provider_id')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->boolean('authorized')->default(0);
-            $table->boolean('email_confirmation')->default(0);
             $table->boolean('status')->default(1);
             $table->unsignedInteger('kind_persons_id')->nullable();
             $table->foreign('kind_persons_id')
