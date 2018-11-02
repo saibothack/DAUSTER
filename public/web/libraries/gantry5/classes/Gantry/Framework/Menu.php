@@ -1,9 +1,8 @@
 <?php
-
 /**
  * @package   Gantry5
  * @author    RocketTheme http://www.rockettheme.com
- * @copyright Copyright (C) 2007 - 2015 RocketTheme, LLC
+ * @copyright Copyright (C) 2007 - 2017 RocketTheme, LLC
  * @license   GNU/GPLv2 and later
  *
  * http://www.gnu.org/licenses/gpl-2.0.html
@@ -11,6 +10,7 @@
 
 namespace Gantry\Framework;
 
+use Gantry\Component\Config\Config;
 use Gantry\Component\Gantry\GantryTrait;
 use Gantry\Component\Menu\AbstractMenu;
 use Gantry\Component\Menu\Item;
@@ -84,7 +84,7 @@ class Menu extends AbstractMenu
         // Build the groups arrays.
         foreach ($items as $item) {
             // Initialize the group.
-            $groups[$item->menutype] = array();
+            $groups[$item->menutype] = [];
 
             // Build the options array.
             foreach ($item->links as $link) {
@@ -101,11 +101,11 @@ class Menu extends AbstractMenu
     /**
      * Return default menu.
      *
-     * @return string
+     * @return string|null
      */
     public function getDefaultMenuName()
     {
-        return $this->default->menutype;
+        return $this->default ? $this->default->menutype : null;
     }
 
     /**
@@ -121,7 +121,7 @@ class Menu extends AbstractMenu
     /**
      * Return active menu.
      *
-     * @return string
+     * @return string|null
      */
     public function getActiveMenuName()
     {
@@ -136,6 +136,18 @@ class Menu extends AbstractMenu
     public function hasActiveMenu()
     {
         return true;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCacheId()
+    {
+        if (!\JFactory::getUser()->guest) {
+            return null;
+        }
+
+        return $this->active ? $this->active->id : 0;
     }
 
     public function isActive($item)
@@ -228,7 +240,7 @@ class Menu extends AbstractMenu
         $this->base = $this->calcBase($params['base']);
 
         // Make sure that the menu item exists.
-        if (!$this->base) {
+        if (!$this->base && !\JFactory::getApplication()->isAdmin()) {
             return;
         }
 
@@ -245,7 +257,7 @@ class Menu extends AbstractMenu
         //}
 
         if (1) {
-            $tree    = $this->base->tree;
+            $tree    = isset($this->base->tree) ? $this->base->tree : [];
             $start   = $params['startLevel'];
             $max     = $params['maxLevels'];
             $end     = $max ? $start + $max - 1 : 0;
@@ -255,6 +267,7 @@ class Menu extends AbstractMenu
             $itemMap = [];
             foreach ($items as $path => &$itemRef) {
                 if (isset($itemRef['id']) && is_numeric($itemRef['id'])) {
+                    $itemRef['path'] = $path;
                     $itemMap[$itemRef['id']] = &$itemRef;
                 }
             }
@@ -273,12 +286,22 @@ class Menu extends AbstractMenu
                     'alias' => $menuItem->alias,
                     'path' => $menuItem->route,
                     'link' => $menuItem->link,
+                    'link_title' => $menuItem->params->get('menu-anchor_title', ''),
+                    'enabled' => (bool) $menuItem->params->get('menu_show', 1),
                 ];
 
                 // Rest of the items will come from saved configuration.
                 if (isset($itemMap[$menuItem->id])) {
                     // ID found, use it.
                     $itemParams += $itemMap[$menuItem->id];
+
+                    // Store new path for the menu item into path map.
+                    if ($itemParams['path'] !== $itemMap[$menuItem->id]['path']) {
+                        if (!$this->pathMap) {
+                            $this->pathMap = new Config([]);
+                        }
+                        $this->pathMap->set(preg_replace('|/|u', '/children/', $itemMap[$menuItem->id]['path']) . '/path', $itemParams['path'], '/');
+                    }
                 } elseif (isset($items[$menuItem->route])) {
                     // ID not found, try to use route.
                     $itemParams += $items[$menuItem->route];
@@ -302,7 +325,6 @@ class Menu extends AbstractMenu
                 // And if not available in configuration, default to Joomla.
                 $itemParams += [
                     'title' => $menuItem->title,
-                    'subtitle' => $menuItem->params->get('menu-anchor_title', ''),
                     'anchor_class' => $menuItem->params->get('menu-anchor_css', ''),
                     'image' => $menuItem->params->get('menu_image', ''),
                     'icon_only' => !$menuItem->params->get('menu_text', 1),
@@ -360,9 +382,12 @@ class Menu extends AbstractMenu
                 if ($item->type == 'url') {
                     // Moved from modules/mod_menu/tmpl/default_url.php, not sure why Joomla had application logic in there.
                     // Keep compatibility to Joomla menu module, but we need non-encoded version of the url.
-                    $item->url(htmlspecialchars_decode(\JFilterOutput::ampReplace(htmlspecialchars($item->link))));
+                    $item->url(
+                        htmlspecialchars_decode(\JFilterOutput::ampReplace(htmlspecialchars($item->link, ENT_COMPAT|ENT_SUBSTITUTE, 'UTF-8')))
+                    );
                 }
             }
+
             // FIXME: need to create collection class to gather the sibling data, otherwise caching cannot work.
             // $cache->store($this->items, $key);
         }

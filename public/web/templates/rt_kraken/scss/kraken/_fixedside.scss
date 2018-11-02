@@ -24,7 +24,7 @@ $fixedside-position: 		left !default;
     	.dir-rtl & {
 			left: auto;
 			right: 0;
-    	}			
+    	}
 	} @else {
 	    right: 0;
     	.dir-rtl & {
@@ -33,15 +33,15 @@ $fixedside-position: 		left !default;
 			.g-main-nav .g-dropdown {
 			    left: 100% !important;
 			    right: auto !important;
-			}	
+			}
 			.g-main-nav .g-toplevel > li > .g-menu-item-container .g-menu-parent-indicator {
 				left: auto !important;
 				right: 0.5rem !important;
 				&:after {
 					content: "\f105" !important;
 				}
-			}		
-    	}		    
+			}
+    	}
 	}
 
 
@@ -58,18 +58,18 @@ $fixedside-position: 		left !default;
 
 	@include breakpoint(mobile-only) {
 		display: none;
-	}	
+	}
 
 	// Logo
 	.g-fixedside-logo {
 		display: block;
 		color: $fixedside-text-color;
 		font-family: get-font-family($font-family-title);
-		font-weight: $font-weight-bold;		
+		font-weight: $font-weight-bold;
 		font-size: $core-font-size + 0.5;;
 		text-align: center;
 		position: relative;
-		margin-bottom: 3rem;
+		margin-bottom: 2rem;
 		@include transition(none);
 		@include breakpoint(tablet-range) {
 			letter-spacing: 0;
@@ -91,25 +91,27 @@ $fixedside-position: 		left !default;
 			margin-left: -12px;
 			bottom: -1rem;
 		}
-		.g-style-preset7 &, .g-style-preset8 & {
-			img {
-				display: none;
-			}
-			span:before {
-				content: "";
-				display: block;
-				width: 48px;
-				height: 48px;
-				margin: 1.5rem auto 0 auto;
-				vertical-align: middle;
-				background: url("gantry-theme://images/logo/logo-alt.png") no-repeat;
-			}
-		}		
-	}	
+    &.g-logo-alt {
+  		.g-style-preset7 &, .g-style-preset8 & {
+  			img {
+  				display: none;
+  			}
+  			span:before {
+  				content: "";
+  				display: block;
+  				width: 48px;
+  				height: 48px;
+  				margin: 1.5rem auto 0 auto;
+  				vertical-align: middle;
+  				background: url("gantry-theme://images/logo/logo-alt.png") no-repeat;
+  			}
+  		}
+    }
+	}
 
 	// Social
 	.g-social {
-		margin-bottom: 1rem;
+		margin: 1rem 0;
 		a {
 			color: $fixedside-text-color;
 			padding: 0.1rem 0.25rem !important;
@@ -121,30 +123,36 @@ $fixedside-position: 		left !default;
 
 	// Side Menu
 	.g-main-nav {
-		margin: 0;
+		margin: 1rem 0;
 
 		.g-toplevel {
 
 			> li {
 				margin: 0.5rem 0;
 				display: block;
+
 				> .g-menu-item-container {
 					text-transform: uppercase;
 					color: $fixedside-text-color;
 					padding: $content-padding/4 0;
-					.g-menu-parent-indicator {	
+
+                    > .g-menu-item-content {
+                        word-break: normal;
+                    }
+
+					.g-menu-parent-indicator {
 						&:after {
 							content: "\f105";
 							opacity: 0.5;
 							.dir-rtl & {
 								content: "\f104";
-							}							
+							}
 						}
 					}
 				}
 				&:hover, &.active {
 					> .g-menu-item-container {
-						color: $accent-color-1;			
+						color: $accent-color-1;
 						> .g-selected {
 							color: $accent-color-1;
 						}
@@ -158,10 +166,30 @@ $fixedside-position: 		left !default;
 					}
 					.dir-rtl & {
 						left: 0.5rem;
-					}					
+					}
 				}
 			}
 		}
+    
+    .g-fullwidth {
+      > .g-dropdown {
+        .g-dropdown {
+          top: 0;
+    			.dir-ltr & {
+    				left: 0;
+    			}
+    			.dir-rtl & {
+    				right: 0;
+    			}
+        }
+  			.dir-ltr & {
+  				left: 100%;
+  			}
+  			.dir-rtl & {
+  				right: 100%;
+  			}
+      }
+    }
 
 		.g-dropdown {
 			background: $accent-color-1;
@@ -179,23 +207,31 @@ $fixedside-position: 		left !default;
 			}
 			.dir-ltr & {
 				left: 100%;
-			}			
+			}
 			.dir-rtl & {
 				right: 100%;
 			}
 		}
 
 		.g-sublevel {
+			.g-dropdown {
+				top: -2px;
+			}
 			> li {
 				> .g-menu-item-container {
 					color: $white;
 					font-weight: bold;
 					border: 1px solid transparent;
+
+					> .g-menu-item-content {
+							word-break: normal;
+					}
+
 					> .g-selected {
 						color: $white;
 						font-weight: bold;
-						border: 1px solid transparent;						
-					}					
+						border: 1px solid transparent;
+					}
 				}
 
 				&:hover, &.active {
@@ -214,31 +250,31 @@ $fixedside-position: 		left !default;
 				}
 				&.g-menu-item-type-particle {
 					&:hover, &.active {
-						> .g-menu-item-container {		
-							border: 1px solid transparent;	
+						> .g-menu-item-container {
+							border: 1px solid transparent;
 						}
-					}				
+					}
 				}
 
 				&:last-child {
-					border-bottom: none;					
+					border-bottom: none;
 				}
 
 				&.g-menu-item-type-particle {
 					&:hover {
 						> .g-menu-item-container {
 							background: inherit;
-						}	
+						}
 					}
 				}
 			}
 		}
-	}	
+	}
 	.g-menu-block {
 		@include breakpoint(mobile-only) {
 			display: none;
-		}		
-	}	
+		}
+	}
 	.g-menu-item-subtitle {
 		text-transform: lowercase;
 		font-size: 0.85rem;
@@ -246,6 +282,16 @@ $fixedside-position: 		left !default;
 		opacity: 0.8;
 		padding-top: 0;
 	}
+  .g-menu-hastouch {
+    .g-standard,
+    .g-fullwidth {
+      .g-sublevel > li.g-menu-item-link-parent > .g-menu-item-container > .g-menu-parent-indicator {
+        background: transparent;
+        border-style: none;
+        margin-top: 0;
+      }
+    }
+  }
 
 	// Preset Thumbnails
 	.g-preset-thumbnails {
@@ -269,66 +315,80 @@ $fixedside-position: 		left !default;
 	}
 }
 
-@media
-only screen and (min-width: 1354px) and (max-width: 1550px),
-only screen and (min-width: 960px) and (max-width: 1355px),
-only screen and (min-width: 768px) and (max-width: 959px) {
+@include breakpoint(no-mobile) {
+	.g-offcanvas-toggle {
+		.dir-ltr & {
+			margin-left: ($fixedside-width - 7 )!important;
+		}
+		.dir-rtl & {
+			margin-right: ($fixedside-width - 7) !important;
+		}		
+	}
 	.g-container {
 		.dir-ltr & {
 			padding-left: $fixedside-width !important;
-		}		
+		}
 		.dir-rtl & {
 			padding-right: $fixedside-width !important;
 		}
 		@if $fixedside-position == 'right' {
 			.dir-rtl & {
 				padding-left: $fixedside-width !important;
-			}			
+			}
 		}
 	}
 }
 
 // Demo Specific
-@media 
-only screen and (min-width: 1354px) and (max-width: 1550px) {
-	#g-header {
-		.g-vertical-slides .g-swiper-slide-content-title {
-		    font-size: $core-font-size + 1.5;  
-		    letter-spacing: 2rem;
-		    margin-right: -2rem;
-		}	
-		.g-carousel .g-swiper-slide-content-title {
-			font-size: $core-font-size + 0.5;
-			line-height: $core-line-height;  
+@media only screen and (min-width: $breakpoints-large-desktop-container + $fixedside-width) {
+	.g-kraken-width-alt {
+		.g-container {
+			width: $breakpoints-large-desktop-container + $fixedside-width;
 		}
 	}
 }
 
-@media 
-only screen and (min-width: 960px) and (max-width: 1355px) {
+@media
+only screen and (min-width: ($breakpoints-large-desktop-container + $fixedside-width)) and (max-width: ($breakpoints-large-desktop-container + ($fixedside-width * 2))) {
 	#g-header {
 		.g-vertical-slides .g-swiper-slide-content-title {
-		    font-size: $core-font-size + 1.35;  
+		    letter-spacing: 2rem;
+		    margin-right: -2rem;
+		    font-size: $core-font-size + 1.5;
+		}
+		.g-carousel .g-swiper-slide-content-title {
+			font-size: $core-font-size + 0.5;
+			line-height: $core-line-height;
+		}
+	}
+}
+
+@media
+only screen and (min-width: $breakpoints-desktop-container) and 
+(max-width: (($breakpoints-large-desktop-container + $fixedside-width) - 0.062)) 
+{
+	#g-header {
+		.g-vertical-slides .g-swiper-slide-content-title {
 		    letter-spacing: 1.5rem;
 		    margin-right: -1.5rem;
-		}	
+		    font-size: $core-font-size + 1.35;
+		}
 		.g-carousel {
 			.swiper-slide-content {
 				padding: 2rem 3.75rem;
 			}
 			.g-swiper-slide-content-title {
 				font-size: $core-font-size + 0.1;
-				line-height: $core-line-height;  
+				line-height: $core-line-height;
 			}
 		}
-	}	
+	}
     #g-footer .g-social {
 		margin: 0 -1.25rem;
-	}	
+	}
 }
 
-@media 
-only screen and (min-width: 960px) and (max-width: 1195px) {
+@include breakpoint(desktop-range) {
 	#g-header {
 		.g-carousel {
 			.swiper-slide-content {
@@ -336,26 +396,22 @@ only screen and (min-width: 960px) and (max-width: 1195px) {
 			}
 		}
 	}
-    #g-footer .g-social {
-		margin: 0 -1.25rem;
-	}	
 }
 
-@media 
-only screen and (min-width: 768px) and (max-width: 959px) {
+@include breakpoint(tablet-range) {
 	#g-header {
 		.g-vertical-slides .g-swiper-slide-content-title {
-		    font-size: $core-font-size + 1.15;  
+		    font-size: $core-font-size + 1.15;
 		    letter-spacing: 1rem;
 		    margin-right: -1rem;
-		}	
+		}
 		.g-carousel {
 			.swiper-slide-content {
 				padding: 1.25rem;
 			}
 			.g-swiper-slide-content-title {
 				font-size: $core-font-size - 0.2;
-				line-height: $core-line-height + 0.25;  
+				line-height: $core-line-height + 0.25;
 				margin: 0 0 1rem 0;
 			}
 			.swiper-button-next, .swiper-button-prev {
@@ -373,7 +429,7 @@ only screen and (min-width: 768px) and (max-width: 959px) {
     	.g-main-nav .g-toplevel > li {
     		margin: 0 0.25rem;
     	}
-    }	
+    }
 	.g-title-promo .g-title {
 		letter-spacing: 2px;
 		line-height: $core-line-height + 0.25;
@@ -385,10 +441,10 @@ only screen and (min-width: 768px) and (max-width: 959px) {
 	#g-mainbar .g-gridcontent .g-gridcontent-title-style-3 .g-gridcontent-item-text2 {
 		font-size: $core-font-size + 0.5;
 	}
-    .g-iconmenu-item {	
+    .g-iconmenu-item {
         @include flex(1 1 auto !important);
-        width: 50% !important;        	
-    }	
+        width: 50% !important;
+    }
     .swiper-container .swiper-slide-content-text .g-swiper-slide-content-title {
 		font-weight: $font-weight-regular;
     }
@@ -403,7 +459,7 @@ only screen and (min-width: 768px) and (max-width: 959px) {
     	}
 	    .g-social {
 			margin: 0 -1.25rem;
-		}    	
+		}
     }
 }
 
@@ -413,5 +469,3 @@ only screen and (min-width: 768px) and (max-width: 959px) {
 		color: #000 !important;
 	}
 }
-
-

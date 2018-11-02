@@ -1,6 +1,11 @@
 name: Block Content
 description: Displays Block Content
 type: particle
+icon: fa-th-large
+
+configuration:
+  caching:
+    type: static
 
 form:
   fields:
@@ -71,8 +76,8 @@ form:
 
         .rokboximage:
           type: input.imagepicker
-          label: RokBox Image
-          description: Select the rokbox image.
+          label: Lightcase Image
+          description: Select the Lightcase Image.
 
         .rokboxcaption:
           type: input.text

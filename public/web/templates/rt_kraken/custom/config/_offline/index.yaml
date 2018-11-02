@@ -1,7 +1,51 @@
 name: _offline
-timestamp: 1536385015
+timestamp: 1541184823
+version: 7
 preset:
   image: 'gantry-admin://images/layouts/offline.png'
   name: _offline
-  timestamp: 1536385015
+  timestamp: 1541184822
 positions: {  }
+sections:
+  top: Top
+  navigation: Navigation
+  showcase: Showcase
+  above: Above
+  utility: Utility
+  feature: Feature
+  sidebar: Sidebar
+  mainbar: Mainbar
+  expanded: Expanded
+  extension: Extension
+  bottom: Bottom
+  copyright: Copyright
+  fixedside: FixedSide
+  header: Header
+  aside: Aside
+  footer: Footer
+  offcanvas: Offcanvas
+particles:
+  messages:
+    system-messages-4472: 'System Messages'
+  infolist:
+    infolist-5107: Offline
+    infolist-8023: 'Maintenance Mode'
+  content:
+    system-content-9694: 'Page Content'
+  custom:
+    custom-8724: 'About Kraken'
+  newsletter:
+    newsletter-4455: 'Subscribe Here'
+  branding:
+    branding-9146: Branding
+  copyright:
+    copyright-4552: Copyright
+  totop:
+    totop-2076: 'To Top'
+  logo:
+    logo-8074: Logo
+    logo-3787: Logo
+  social:
+    social-5616: Social
+    social-9848: Social
+inherit: {  }

@@ -70,7 +70,6 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $user = User::create($data->only('kindPerson', 'name', 'surnames', 'birthday', 'email', 'phone', 'password'));
-
         $data = array();
 
         if($data['kindPerson'] == 1) {
@@ -93,7 +92,6 @@ class RegisterController extends Controller
         }
 
         Mail::to($data['mail'])->send(new sendMail($data));
-
         return $user;
     }
 }

@@ -1,6 +1,11 @@
 name: Grid Statistic
 description: Display Grid Statistic.
 type: particle
+icon: fa-sort-numeric-desc
+
+configuration:
+  caching:
+    type: static
 
 form:
   fields:

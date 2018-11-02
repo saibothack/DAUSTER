@@ -2,7 +2,7 @@
 	display: block;
 	margin: 2rem auto 0.5rem auto;
 }
-#g-simplecounter-calendar {
+.g-simplecounter-calendar {
 	text-align: center;
 	.counter-block {
 		display: inline-block;
@@ -29,12 +29,12 @@
 			width: 85px;
 			height: 50px;
 			line-height: 50px;
-		}		
+		}
 	}
 	.word {
 		text-transform: uppercase;
 		@include breakpoint(mobile-only) {
 			font-size: 75%;
-		}		
+		}
 	}
 }

@@ -2,6 +2,9 @@
   @include display(flex);
   @include flex-flow(row wrap);
   @include flex-wrap(wrap);
+  small {
+      font-size: 85%;
+  }
   .g-infolist-item {
     @include flex(1 1 auto);
     width: 100%;
@@ -72,12 +75,12 @@
   .g-infolist-item-title {
     margin: 0 0 0.25rem 0;
     font-family: get-font-family($font-family-title);
-    font-weight: $font-weight-regular;  
+    font-weight: $font-weight-regular;
     font-size: $core-font-size + 0.1;
     line-height: $core-line-height - 0.25;
     @include breakpoint(tablet-range) {
       font-size: $core-font-size;
-    }   
+    }
   }
   .g-infolist-item-desc {
     margin: 0;
@@ -115,7 +118,7 @@
         margin-left: 1%;
       }
     }
-  } 
+  }
   &.g-3cols {
     .g-infolist-item {
       width: 30.66667%;
@@ -123,7 +126,7 @@
         margin-left: 0;
         margin-right: 0;
       }
-    } 
+    }
   }
   &.g-4cols {
     .g-infolist-item {
@@ -153,7 +156,7 @@
         margin-left: 1%;
         margin-right: 0;
       }
-    } 
+    }
   }
   @include breakpoint(mobile-only) {
     &[class*="cols"] {

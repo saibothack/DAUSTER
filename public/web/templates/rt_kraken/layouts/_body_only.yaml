@@ -59,15 +59,6 @@ children:
                   enabled: 1
                 children: {  }
   -
-    id: 8ac9124f-8b20-2634-fdb8-8b98f69fa836
-    type: offcanvas
-    subtype: false
-    title: Offcanvas
-    attributes:
-      name: 'Offcanvas Section'
-      boxed: 0
-    children: {  }
-  -
     id: f17d4d6e-e8ff-3dee-d4bf-8fe70d450158
     type: atoms
     subtype: false

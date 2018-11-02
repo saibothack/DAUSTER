@@ -68,6 +68,26 @@ class DatabaseSeeder extends Seeder
 
                         }
 
+                        if ($role->name == 'Cliente') {
+                            $permissions = 'Servicios,Alta servicio,Mi perfil,Tarjetas';
+                            $permissionsArray = explode(',', $permissions);
+
+                            foreach ($permissionsArray as $permission) {
+                                //$role->permissions()->sync($permission);
+                                $p = Permission::where('name', '=', $permission)->firstOrFail();
+                                $role->givePermissionTo($p);
+                            }
+                        }
+                        if ($role->name == 'Conductor') {
+                            $permissions = 'Servicios,Mi perfil,Tarjetas';
+                            $permissionsArray = explode(',', $permissions);
+
+                            foreach ($permissionsArray as $permission) {
+                                $p = Permission::where('name', '=', $permission)->firstOrFail();
+                                $role->givePermissionTo($p);
+                            }
+                        }
+
                         $this->command->info('Roles ' . $role->name . ' added successfully');
                     }
 

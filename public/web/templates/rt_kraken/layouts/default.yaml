@@ -134,6 +134,7 @@ children:
                 subtype: logo
                 title: Logo
                 attributes:
+                  class: 'g-logo g-logo-alt'
                   enabled: 0
                   image: 'gantry-media://logo/logo-alt.png'
                 children: {  }
@@ -1100,6 +1101,7 @@ children:
                 subtype: logo
                 title: Logo
                 attributes:
+                  class: 'g-logo g-logo-alt'
                   enabled: 1
                   image: 'gantry-media://logo/logo-alt.png'
                 children: {  }
@@ -1255,7 +1257,7 @@ children:
                 title: Logo
                 attributes:
                   enabled: 1
-                  class: g-fixedside-logo
+                  class: 'g-fixedside-logo g-logo-alt'
                 children: {  }
       -
         id: 96677f06-e44d-4b34-8346-87f2f418b1e6
@@ -1343,7 +1345,7 @@ children:
                 title: Logo
                 attributes:
                   enabled: 1
-                  class: g-offcanvas-logo
+                  class: 'g-offcanvas-logo g-logo-alt'
                 children: {  }
       -
         id: dea82296-2d21-464c-bf6d-3c98ee8eafaa

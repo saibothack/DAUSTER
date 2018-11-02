@@ -1,9 +1,8 @@
 <?php
-
 /**
  * @package   Gantry5
  * @author    RocketTheme http://www.rockettheme.com
- * @copyright Copyright (C) 2007 - 2015 RocketTheme, LLC
+ * @copyright Copyright (C) 2007 - 2017 RocketTheme, LLC
  * @license   GNU/GPLv2 and later
  *
  * http://www.gnu.org/licenses/gpl-2.0.html
@@ -12,10 +11,9 @@
 namespace Gantry\Admin;
 
 use Gantry\Component\Layout\Layout;
-use Gantry\Framework\Base\Gantry;
-use Gantry\Framework\Outlines;
 use Gantry\Joomla\CacheHelper;
 use Gantry\Joomla\Manifest;
+use Gantry\Joomla\StyleHelper;
 use Joomla\Registry\Registry;
 use RocketTheme\Toolbox\Event\Event;
 use RocketTheme\Toolbox\Event\EventSubscriberInterface;
@@ -27,6 +25,7 @@ class EventListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
+            'admin.init.theme'  => ['onAdminThemeInit', 0],
             'admin.global.save' => ['onGlobalSave', 0],
             'admin.styles.save' => ['onStylesSave', 0],
             'admin.settings.save' => ['onSettingsSave', 0],
@@ -36,8 +35,19 @@ class EventListener implements EventSubscriberInterface
         ];
     }
 
+    public function onAdminThemeInit(Event $event)
+    {
+        \JPluginHelper::importPlugin('gantry5');
+
+        // Trigger the onGantryThemeInit event.
+        $dispatcher = \JEventDispatcher::getInstance();
+        $dispatcher->trigger('onGantry5AdminInit', ['theme' => $event->theme]);
+    }
+
     public function onGlobalSave(Event $event)
     {
+        \JPluginHelper::importPlugin('gantry5');
+
         // Trigger the onGantryThemeUpdateCss event.
         $dispatcher = \JEventDispatcher::getInstance();
         $dispatcher->trigger('onGantry5SaveConfig', [$event->data]);
@@ -58,9 +68,19 @@ class EventListener implements EventSubscriberInterface
 
     public function onLayoutSave(Event $event)
     {
+        /** @var Layout $layout */
+        $layout = $event->layout;
+
+        if ($layout->name[0] !== '_' && $layout->name !== 'default') {
+            $preset = isset($layout->preset['name']) ? $layout->preset['name'] : 'default';
+
+            // Update Joomla template style.
+            StyleHelper::update($layout->name, $preset);
+        }
+
         $theme = $event->gantry['theme.name'];
 
-        $positions = $event->gantry['configurations']->positions();
+        $positions = $event->gantry['outlines']->positions();
         $positions['debug'] = 'Debug';
 
         $manifest = new Manifest($theme);
@@ -102,9 +122,13 @@ class EventListener implements EventSubscriberInterface
             'icon_only' => false,
             'visible' => true,
             'group' => 0,
-            'columns' => []
+            'columns' => [],
+            'link_title' => '',
+            'hash' => '',
+            'class' => ''
         ];
 
+        $gantry = $event->gantry;
         $menu = $event->menu;
 
         // Save global menu settings into Joomla.
@@ -117,7 +141,7 @@ class EventListener implements EventSubscriberInterface
             'title' => $menu['settings.title'],
             'description' => $menu['settings.description']
         ];
-        if (!$menuType->save($options)) {
+        if ($gantry->authorize('menu.edit') && !$menuType->save($options)) {
             throw new \RuntimeException('Saving menu failed: '. $menuType->getError(), 400);
         }
 
@@ -134,16 +158,17 @@ class EventListener implements EventSubscriberInterface
                 // Menu item exists in Joomla, let's update it instead.
                 unset($item['type'], $item['link']);
 
-                $item['id'] = $id;
+                $item['id'] = (int) $id;
 
                 $title = $menu["items.{$key}.title"];
                 $browserNav = intval($menu["items.{$key}.target"] === '_blank');
 
                 $options = [
-                    'menu-anchor_title' => $menu["items.{$key}.subtitle"],
-                    'menu-anchor_css' => $menu["items.{$key}.anchor_class"],
+                    // Disabled as the option has different meaning in Joomla than in Gantry, see issue #1656.
+                    // 'menu-anchor_css' => $menu["items.{$key}.class"],
                     'menu_image' => $menu["items.{$key}.image"],
-                    'menu_text' => intval(!$menu["items.{$key}.icon_only"])
+                    'menu_text' => intval(!$menu["items.{$key}.icon_only"]),
+                    'menu_show' => intval($menu["items.{$key}.enabled"]),
                 ];
 
                 $modified = false;
@@ -165,7 +190,7 @@ class EventListener implements EventSubscriberInterface
                     }
                 }
 
-                if ($modified) {
+                if ($modified && $gantry->authorize('menu.edit')) {
                     $table->params = (string) $params;
                     if (!$table->check() || !$table->store()) {
                         throw new \RuntimeException("Failed to save /{$key}: {$table->getError()}", 400);
@@ -173,7 +198,10 @@ class EventListener implements EventSubscriberInterface
                 }
 
                 // Avoid saving values which are also stored in Joomla.
-                unset($item['title'], $item['subtitle'], $item['anchor_class'], $item['image'], $item['icon_only'], $item['target']);
+                unset($item['title'], $item['anchor_class'], $item['image'], $item['icon_only'], $item['target']);
+                if (version_compare(JVERSION, '3.5.1', '>=')) {
+                    unset($item['enabled']);
+                }
 
             }
 
@@ -192,12 +220,8 @@ class EventListener implements EventSubscriberInterface
                 unset($item['link']);
             }
 
-            if (!isset($item['type']) && isset($item['id']) && count($item) === 1) {
-                // Remove Joomla menu items which have no custom Gantry settings.
-                unset($event->menu["items.{$key}"]);
-            } else {
-                $event->menu["items.{$key}"] = $item;
-            }
+            // Because of ordering we need to save all menu items, including those from Joomla which have no data except id.
+            $event->menu["items.{$key}"] = $item;
         }
 
         // Clean the cache.

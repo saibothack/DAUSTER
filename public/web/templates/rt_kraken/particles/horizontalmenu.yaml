@@ -1,13 +1,18 @@
 name: Horizontal Menu
 description: Display horizontal menu.
 type: particle
+icon: fa-forward
+
+configuration:
+  caching:
+    type: static
 
 form:
   fields:
     enabled:
       type: input.checkbox
       label: Enabled
-      description: Globally enable icon menu particles.
+      description: Globally enable particles.
       default: true
 
     class:

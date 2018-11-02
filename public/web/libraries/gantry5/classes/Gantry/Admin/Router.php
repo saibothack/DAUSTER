@@ -1,9 +1,8 @@
 <?php
-
 /**
  * @package   Gantry5
  * @author    RocketTheme http://www.rockettheme.com
- * @copyright Copyright (C) 2007 - 2015 RocketTheme, LLC
+ * @copyright Copyright (C) 2007 - 2017 RocketTheme, LLC
  * @license   GNU/GPLv2 and later
  *
  * http://www.gnu.org/licenses/gpl-2.0.html
@@ -11,12 +10,13 @@
 
 namespace Gantry\Admin;
 
+use Gantry\Component\File\CompiledYamlFile;
 use Gantry\Component\Request\Request;
 use Gantry\Component\Response\JsonResponse;
 use Gantry\Component\Response\Response;
 use Gantry\Component\Router\Router as BaseRouter;
 use Gantry\Joomla\StyleHelper;
-use Joomla\Registry\Registry;
+use RocketTheme\Toolbox\ResourceLocator\UniformResourceLocator;
 
 /**
  * Gantry administration router for Joomla.
@@ -33,14 +33,16 @@ class Router extends BaseRouter
         // TODO: Remove style variable.
         $style = $input->getInt('style');
         $theme = $input->getCmd('theme');
+        $path = array_filter(explode('/', $input->getString('view', '')), function($var) { return $var !== ''; });
+
         $this->setTheme($theme, $style);
 
         /** @var Request $request */
         $request = $this->container['request'];
 
         $this->method = $request->getMethod();
-        $this->path = explode('/', $input->getString('view'));
-        $this->resource = array_shift($this->path) ?: 'themes';
+        $this->path = $path ?: (isset($this->container['theme.name']) ? ['configurations', true] : ['themes']);
+        $this->resource = array_shift($this->path);
         $this->format = $input->getCmd('format', 'html');
         $ajax = ($this->format == 'json');
 
@@ -71,15 +73,16 @@ class Router extends BaseRouter
 
         $path = JPATH_SITE . '/templates/' . $theme;
 
-        $this->container['theme.path'] = $path;
-        $this->container['theme.name'] = $theme;
+        if (!is_file("{$path}/gantry/theme.yaml")) {
+            $theme = null;
+            $this->container['streams']->register();
 
-        // Load language file for the template.
-        $languageFile = 'tpl_' . $theme;
-        $lang = \JFactory::getLanguage();
-        $lang->load($languageFile, JPATH_SITE)
-            || $lang->load($languageFile, $path)
-            || $lang->load($languageFile, $path, 'en-GB');
+            /** @var UniformResourceLocator $locator */
+            $locator = $this->container['locator'];
+
+            CompiledYamlFile::$defaultCachePath = $locator->findResource('gantry-cache://theme/compiled/yaml', true, true);
+            CompiledYamlFile::$defaultCaching = $this->container['global']->get('compile_yaml', 1);
+        }
 
         $this->container['base_url'] = \JUri::base(true) . '/index.php?option=com_gantry5';
 
@@ -94,6 +97,20 @@ class Router extends BaseRouter
             'picker/layouts' => "&view=layouts&theme={$theme}&{$token}=1",
         ];
 
+        if (!$theme) {
+            return $this;
+        }
+
+        $this->container['theme.path'] = $path;
+        $this->container['theme.name'] = $theme;
+
+        // Load language file for the template.
+        $languageFile = 'tpl_' . $theme;
+        $lang = \JFactory::getLanguage();
+        $lang->load($languageFile, JPATH_SITE)
+            || $lang->load($languageFile, $path)
+            || $lang->load($languageFile, $path, 'en-GB');
+
         return $this;
     }
 
@@ -106,6 +123,7 @@ class Router extends BaseRouter
      * Send response to the client.
      *
      * @param Response $response
+     * @return string
      */
     protected function send(Response $response)
     {
@@ -115,8 +133,8 @@ class Router extends BaseRouter
         $document->setMimeEncoding($response->mimeType);
 
         // Output HTTP header.
-        header("HTTP/1.1 {$response->getStatus()}", true, $response->getStatusCode());
-        header("Content-Type: {$response->mimeType}; charset={$response->charset}");
+        $app->setHeader('Status', $response->getStatus());
+        $app->setHeader('Content-Type', $response->mimeType . '; charset=' . $response->charset);
         foreach ($response->getHeaders() as $key => $values) {
             $replace = true;
             foreach ($values as $value) {
@@ -125,12 +143,18 @@ class Router extends BaseRouter
             }
         }
 
+        if ($response instanceof JsonResponse) {
+            $app->setHeader('Expires', 'Wed, 17 Aug 2005 00:00:00 GMT', true);
+            $app->setHeader('Last-Modified', gmdate('D, d M Y H:i:s') . ' GMT', true);
+            $app->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0', false);
+            $app->setHeader('Pragma', 'no-cache');
+            $app->sendHeaders();
+        }
+
         // Output Gantry response.
         echo $response;
 
         if ($response instanceof JsonResponse) {
-            // It is much faster and safer to exit now than to let Joomla to send the response.
-            $app->sendHeaders();
             $app->close();
         }
     }

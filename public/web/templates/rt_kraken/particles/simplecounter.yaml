@@ -1,6 +1,11 @@
 name: Simple Counter
 description: Display simple counter.
 type: particle
+icon: fa-calendar-plus-o
+
+configuration:
+  caching:
+    type: static
 
 form:
   fields:
@@ -28,16 +33,49 @@ form:
       placeholder: Enter short description
 
     date:
-      type: input.text
-      label: Date
-      description: Set the date.
-      placeholder: Enter date (1-31)
+      type: select.select
+      label: Day
+      description: Select the day
+      placeholder: 'Select the day'
+      default: 0
+      options:
+        0: 1
+        1: 2
+        2: 3
+        3: 4
+        4: 5
+        5: 6
+        6: 7
+        7: 8
+        8: 9
+        9: 10
+        10: 11
+        11: 12
+        12: 13
+        13: 14
+        14: 15
+        15: 16
+        16: 17
+        17: 18
+        18: 19
+        19: 20
+        20: 21
+        21: 22
+        22: 23
+        23: 24
+        24: 25
+        25: 26
+        26: 27
+        27: 28
+        28: 29
+        29: 30
+        30: 31
 
     month:
       type: select.select
       label: Month
       description: Select the month
-      placeholder: 'Select...'
+      placeholder: 'Select the month'
       default: 0
       options:
         0: January

@@ -1,6 +1,11 @@
 name: Icon Menu
 description: Display icon menu.
 type: particle
+icon: fa-plus-square 
+
+configuration:
+  caching:
+    type: static
 
 form:
   fields:

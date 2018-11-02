@@ -1,9 +1,8 @@
 <?php
-
 /**
  * @package   Gantry5
  * @author    RocketTheme http://www.rockettheme.com
- * @copyright Copyright (C) 2007 - 2015 RocketTheme, LLC
+ * @copyright Copyright (C) 2007 - 2017 RocketTheme, LLC
  * @license   GNU/GPLv2 and later
  *
  * http://www.gnu.org/licenses/gpl-2.0.html
@@ -11,87 +10,100 @@
 
 namespace Gantry\Framework;
 
-use Gantry\Component\Gantry\GantryTrait;
+use Gantry\Component\Assignments\AbstractAssignments;
 use Gantry\Joomla\CacheHelper;
 use Gantry\Joomla\StyleHelper;
 use Joomla\Utilities\ArrayHelper;
 
-class Assignments
+class Assignments extends AbstractAssignments
 {
-    use GantryTrait;
+    protected $platform = 'Joomla';
 
-    protected $style_id;
-
-    public function __construct($style_id)
+    /**
+     * Load all assignments.
+     *
+     * @return array
+     */
+    public function loadAssignments()
     {
-        $this->style_id = $style_id;
+        $app = \JFactory::getApplication();
+
+        if (!$app->isSite()) {
+            return [];
+        }
+
+        // Get current template, style id and rules.
+        $template = $app->getTemplate();
+        $active = $app->getMenu()->getActive();
+        if ($active) {
+            $style = (int) $active->template_style_id;
+            $rules = [$active->menutype => [$active->id => true]];
+        } else {
+            $style = 0;
+            $rules = [];
+        }
+
+        // Load saved assignments.
+        $assignments = parent::loadAssignments();
+
+        // Add missing template styles from Joomla.
+        $styles = StyleHelper::loadStyles($template);
+        $assignments += array_fill_keys(array_keys($styles), []);
+
+        foreach ($assignments as $id => &$assignment) {
+            // Add current menu item if it has been assigned to the style.
+            $assignment['menu'] = $style === $id ? $rules : [];
+
+            // Always add the current template style.
+            $assignment['style'] =  ['id' => [$id => true]];
+        }
+
+        return $assignments;
     }
 
-    public function get()
+    /**
+     * Save assignments for the configuration.
+     *
+     * @param array $data
+     */
+    public function save(array $data)
     {
-        return $this->getMenu();
-    }
+        $data += ['assignment' => 0, 'menu' => []];
 
-    public function set($data)
-    {
-        if (isset($data['assignment'])) {
-            $this->setAssignment($data['assignment']);
-        }
-        if (isset($data['menu'])) {
-            $this->setMenu($data['menu']);
-        }
+        // Joomla stores language and menu assignments by its own.
+        $this->saveAssignment($data['assignment']);
+        $this->saveMenu($data['menu']);
+        unset($data['assignment'], $data['menu'], $data['style']);
+
+        // Continue saving rest of the assignments.
+        parent::save($data);
     }
 
     public function types()
     {
-        return ['menu'];
+        return ['menu', 'style'];
     }
 
-    public function getMenu()
+    public function saveMenu($data)
     {
-        require_once JPATH_ADMINISTRATOR . '/components/com_menus/helpers/menus.php';
-        $data = \MenusHelper::getMenuLinks();
+        $active = [];
+        foreach ($data as $menutype => $items) {
+            $active += array_filter($items, function($value) {return $value > 0; });
 
-        $userid = \JFactory::getUser()->id;
-
-        $list = [];
-
-        foreach ($data as $menu) {
-            $items = [];
-            foreach ($menu->links as $link) {
-                $items[] = [
-                    'name' => 'menu[' . $link->value . ']',
-                    'field' => ['id', 'link' . $link->value],
-                    'value' => $link->template_style_id == $this->style_id,
-                    'disabled' => $link->type != 'component' || $link->checked_out && $link->checked_out != $userid,
-                    'label' => str_repeat('—', max(0, $link->level-1)) . ' ' . $link->text
-                ];
-            }
-            $group = [
-                'label' => $menu->title ?: $menu->menutype,
-                'items' => $items
-            ];
-
-            $list[] = $group;
         }
-
-        return $list;
-    }
-
-    public function setMenu($data)
-    {
-        $active = array_keys(array_filter($data, function($value) {return $value == 1; }));
+        $active = array_keys($active);
 
         // Detect disabled template.
         $extension = \JTable::getInstance('Extension');
 
-        $template = static::gantry()['theme.name'];
+        $template = Gantry::instance()['theme.name'];
         if ($extension->load(array('enabled' => 0, 'type' => 'template', 'element' => $template, 'client_id' => 0))) {
             throw new \RuntimeException(\JText::_('COM_TEMPLATES_ERROR_SAVE_DISABLED_TEMPLATE'));
         }
 
+        \JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_templates/tables');
         $style = \JTable::getInstance('Style', 'TemplatesTable');
-        if (!$style->load($this->style_id) || $style->client_id != 0) {
+        if (!$style->load($this->configuration) || $style->client_id != 0) {
             throw new \RuntimeException('Template style does not exist');
         }
 
@@ -102,7 +114,7 @@ class Assignments
             $db   = \JFactory::getDbo();
             $user = \JFactory::getUser();
 
-            if (!empty($active) && is_array($active)) {
+            if (!empty($active)) {
                 ArrayHelper::toInteger($active);
 
                 // Update the mapping for menu items that this style IS assigned to.
@@ -143,12 +155,12 @@ class Assignments
 
     public function getAssignment()
     {
-        $style = StyleHelper::getStyle($this->style_id);
+        $style = StyleHelper::getStyle($this->configuration);
 
         return $style->home;
     }
 
-    public function setAssignment($value)
+    public function saveAssignment($value)
     {
         $options = $this->assignmentOptions();
 
@@ -156,7 +168,7 @@ class Assignments
             throw new \RuntimeException('Invalid value for default assignment!', 400);
         }
 
-        $style = StyleHelper::getStyle($this->style_id);
+        $style = StyleHelper::getStyle($this->configuration);
         $style->home = $value;
 
         if (!$style->check() || !$style->store()) {
@@ -169,7 +181,7 @@ class Assignments
 
     public function assignmentOptions()
     {
-        if ((string)(int) $this->style_id !== (string) $this->style_id) {
+        if ((string)(int) $this->configuration !== (string) $this->configuration) {
             return [];
         }
 

@@ -8,13 +8,13 @@
 .nopaddingall {
 	> .g-content {
 		padding: 0 !important;
-	}	
+	}
 }
 
 .nomarginall {
 	> .g-content {
 		margin: 0 !important;
-	}	
+	}
 }
 
 .title-center {
@@ -64,6 +64,20 @@
 	}
 }
 
+.moduletable, .widget {
+    &[class*="box"] {
+      padding: $content-padding;
+      margin: $content-margin;
+    }
+    &[class*="title"] {
+        .g-title {
+            margin-left: 0;
+            margin-right: 0;
+            margin-top: 0;
+        }
+    }
+}
+
 .title1 {
 	.g-title, .button {
 		background: darken($box1-background, 8%);
@@ -74,10 +88,12 @@
   }
 }
 .box1 {
+  &.moduletable, &.widget,
 	&.g-outer-box,
   > .g-content  {
 		background: darken($box1-background, 8%);
 	}
+  &.moduletable, &.widget,
   > .g-content  {
 		color: $white;
   }
@@ -117,10 +133,12 @@
   }
 }
 .box2 {
+  &.moduletable, &.widget,
 	&.g-outer-box,
    > .g-content {
 		background: $box2-background;
 	}
+  &.moduletable, &.widget,
 	 > .g-content {
 		color: $white;
 	}
@@ -133,7 +151,7 @@
       color: lighten($box2-background, 15%);
     }
 	}
-} 
+}
 .box2, .title2 {
 	.button {
 		&:hover, &:active, &:focus {
@@ -160,10 +178,12 @@
   }
 }
 .box3 {
+  &.moduletable, &.widget,
 	&.g-outer-box,
    > .g-content {
 		background: $box3-background;
 	}
+  &.moduletable, &.widget,
 	 > .g-content {
 		color: $white;
 	}
@@ -176,7 +196,7 @@
       color: lighten($box3-background, 15%);
     }
 	}
-} 
+}
 .box3, .title3 {
 	.button {
 		&:hover, &:active, &:focus {
@@ -200,10 +220,12 @@
 	}
 }
 .box4 {
+  &.moduletable, &.widget,
 	&.g-outer-box,
    > .g-content {
 		background: $box4-background;
 	}
+  &.moduletable, &.widget,
 	 > .g-content {
 		color: $base-text-color;
 	}
@@ -216,7 +238,7 @@
       color: lighten($accent-color-1, 15%);
     }
 	}
-} 
+}
 .box4, .title4 {
 	.button {
 		&:hover, &:active, &:focus {
@@ -254,7 +276,8 @@
 }
 }
 .box-white {
-&.g-outer-box,
+  &.moduletable, &.widget,
+  &.g-outer-box,
   > .g-content {
 	background: $box-white-background;
 }
@@ -264,7 +287,7 @@
 a {
 	color: darken($box-white-background, 25%);
 }
-} 
+}
 .box-white, .title-white {
 .button {
 	&:hover, &:active, &:focus {
@@ -287,6 +310,7 @@ a {
 	}
 }
 .box-grey {
+  &.moduletable, &.widget,
 	&.g-outer-box,
    > .g-content {
 		background: $box-grey-background;
@@ -300,7 +324,7 @@ a {
       color: darken($box-grey-background, 15%);
     }
 	}
-} 
+}
 .box-grey, .title-grey {
 	.button {
 		&:hover, &:active, &:focus {
@@ -323,6 +347,7 @@ a {
 	}
 }
 .box-pink {
+  &.moduletable, &.widget,
 	&.g-outer-box,
    > .g-content {
 		background: $box-pink-background;
@@ -336,7 +361,7 @@ a {
       color: darken($box-pink-background, 15%);
     }
 	}
-} 
+}
 .box-pink, .title-pink {
 	.button {
 		&:hover, &:active, &:focus {
@@ -359,6 +384,7 @@ a {
 	}
 }
 .box-red {
+  &.moduletable, &.widget,
 	&.g-outer-box,
    > .g-content {
 		background: $box-red-background;
@@ -372,7 +398,7 @@ a {
       color: darken($box-red-background, 15%);
     }
 	}
-} 
+}
 .box-red, .title-red {
 	.button {
 		&:hover, &:active, &:focus {
@@ -395,6 +421,7 @@ a {
 	}
 }
 .box-purple {
+  &.moduletable, &.widget,
 	&.g-outer-box,
    > .g-content {
 		background: $box-purple-background;
@@ -408,7 +435,7 @@ a {
       color: darken($box-purple-background, 15%);
     }
 	}
-} 
+}
 .box-purple, .title-purple {
 	.button {
 		&:hover, &:active, &:focus {
@@ -431,6 +458,7 @@ a {
 	}
 }
 .box-blue {
+  &.moduletable, &.widget,
 	&.g-outer-box,
    > .g-content {
 		background: $box-blue-background;
@@ -444,7 +472,7 @@ a {
       color: darken($box-blue-background, 15%);
     }
 	}
-} 
+}
 .box-blue, .title-blue {
 	.button {
 		&:hover, &:active, &:focus {
@@ -467,6 +495,7 @@ a {
 	}
 }
 .box-orange {
+  &.moduletable, &.widget,
 	&.g-outer-box,
    > .g-content {
 		background: $box-orange-background;
@@ -480,7 +509,7 @@ a {
       color: darken($box-orange-background, 15%);
     }
 	}
-} 
+}
 .box-orange, .title-orange {
 	.button {
 		&:hover, &:active, &:focus {
@@ -500,14 +529,14 @@ a {
 .spaced {
 	.g-content {
 		margin: 1px;
-	}		
+	}
 }
 
 .bordered {
 	.g-content {
 		border: 1px solid $rule-color;
 		margin: 1px;
-	}	
+	}
 }
 
 .shadow {

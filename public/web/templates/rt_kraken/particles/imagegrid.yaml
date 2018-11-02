@@ -1,13 +1,18 @@
 name: Image Grid
 description: Display image grid.
 type: particle
+icon: fa-picture-o
+
+configuration:
+  caching:
+    type: static
 
 form:
   fields:
     enabled:
       type: input.checkbox
       label: Enabled
-      description: Globally enable icon menu particles.
+      description: Globally enable particles.
       default: true
 
     class:
@@ -67,6 +72,3 @@ form:
           label: Caption
           description: Customize the image caption.
           placeholder: Enter caption
-
-
-

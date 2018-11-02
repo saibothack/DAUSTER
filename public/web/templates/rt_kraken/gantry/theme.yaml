@@ -1,8 +1,8 @@
 details:
   name: Kraken
-  version: 1.0.0
+  version: 1.2.2
   icon: paper-plane
-  date: October  2, 2015
+  date: January 12, 2018
   author:
     name: RocketTheme, LLC
     email: support@rockettheme.com
@@ -16,9 +16,6 @@ details:
 
   updates:
     link: http://updates.rockettheme.com/themes/kraken.yaml
-
-  news:
-    link: http://news.rockettheme.com/prime/themes.yaml
 
   copyright: (C) 2007 - 2015 RocketTheme, LLC. All rights reserved.
   license: GPLv2

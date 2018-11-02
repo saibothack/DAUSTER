@@ -6,7 +6,7 @@
 
 	<div class="g-newsletter {{ particle.class|e }}">
 		{% if particle.headtext %}<div class="g-newsletter-headtext">{{ particle.headtext|raw }}</div>{% endif %}
-		<form class="g-newsletter-form" action="http://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open('http://feedburner.google.com/fb/a/mailverify?uri={{ particle.uri|e }}', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true">
+		<form class="g-newsletter-form" action="//feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open('//feedburner.google.com/fb/a/mailverify?uri={{ particle.uri|e }}', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true">
 			<input class="g-newsletter-inputbox" type="text" placeholder="{{ particle.inputboxtext|raw }}" name="email">
 			<input type="hidden" value="{{ particle.uri|e }}" name="uri">
 			<input type="hidden" name="loc" value="en_US">

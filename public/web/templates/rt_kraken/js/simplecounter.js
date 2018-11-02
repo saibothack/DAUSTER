@@ -1,326 +1,246 @@
-/*
----
-description: a simple counter that counts how much time remains/passed from a spcified date and time
-
-license: MIT-style
-
-authors:
-- Arieh Glazer
-
-requires:
-- core/1.3 : [Class, Class.Extras, Element]
-
-provides: SimpleCounter
-
-...
-*/
 /*!
-Copyright (c) 2010 Arieh Glazer
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE
-*/
-var SimpleCounter = new Class({
-	Implements : [Options, Events],
-	options : {
-		/*
-		 * onDone : $empty
-		 */
-		format : "{D} {H} {M} {S}", //how to format date output
-		lang : {//Holds the single and pluar time unit names:
-			d:{single:'Day',plural:'Days'},       //days
-			h:{single:'Hour',plural:'Hours'},     //hours
-			m:{single:'Minute',plural:'Minutes'}, //minutes
-			s:{single:'Second',plural:'Seconds'}  //seconds
-		},
-		leadingZero : true, //whether or not to add a leading zero to counters
-		onGoing : false
-	},
-
-	/**
-	 * @var {Object} contains current date data
-	 */
-	time :{d:0,h:0,m:0,s:0},
-
-	/**
-	 * @var {Object} which units should no longer be counted down
-	 */
-	stopTime : {d:false,h:false,m:false,s:false},
-
-	/**
-	 * @var {Interval Pointer} a handle to the interval calls
-	 */
-	handle : null,
-
-	/**
-	 * @var {Element} the element containing the counter
-	 */
-	container : null,
-
-	/**
-	 * @var {Boolean} whether to count down (true) or up (false)
-	 */
-	countDown : true,
-
-	/**
-	 * @var {Object} Hods the formats to substitue the strings with. Assumes {number} with unit number and {word} with unit name
-	 */
-	formats : {
-		full : "<span class='counter-block'><span class='number'>{number}</span> <span class='word'>{word}</span></span>", //Format for full units representation
-		shrt : "<span class='counter-block'><span class='number'>{number}</span></span>" //Format for short unit representation
-	},
-
-	/**
-	 * constructor
-	 *  @var {Element} element to inject the counter into
-	 *  @var {Date|Integer} A target date or a timestamp (in seconds) or a target date
-	 *  @var {Object} an options object
-	 * @return null
-	 */
-	initialize : function(el,target_time,options){
-		this.setOptions(options);
-
-		this.container = new Element('div',{'class':'counter_container'}).inject( document.id(el) );
-
-		this.setTargetTime(target_time);
-
-		this.setClock = this.setClock.bind(this);
-
-		if (!this.countDown && !this.options.onGoing){
-			this.reset();
-			this.stop();
-		} else this.start();
-	},
-	/**
-	 * Inintializes the counter paramaters
-	 *   @var {Date|Integer} A target date or a timestamp (in seconds) or a target date
-	 * @return null
-	 */
-	setTargetTime : function(target_time){
-		var timeleft = (typeOf(target_time) == 'date') ? target_time/1000 : target_time,
-			now = (new Date())/1000,
-			seconds = 0,
-			minutes = 0,
-			days = 0,
-			hours = 0;
-
-		timeleft = (timeleft - now).toInt();
-
-		this.countDown = timeleft > 0;
-		if (timeleft<0) timeleft = timeleft*-1;
-
-		seconds  =  timeleft%60;
-		timeleft -= seconds;
-		timeleft =  timeleft/60;
-
-		minutes  =  timeleft%60;
-		timeleft -= minutes;
-		timeleft =  timeleft/60;
-
-		hours    =  timeleft%24;
-		timeleft -= hours;
-
-		days     =  timeleft/24;
-
-		this.stopTime.d =    ( days === 0 );
-		this.stopTime.h =   ( hours === 0 );
-		this.stopTime.m = ( minutes === 0 );
-		this.stopTime.s = ( seconds === 0 );
-
-		this.time = {d:days,h:hours,m:minutes,s:seconds};
-	},
-
-	/**
-	 * Sets the clock. increases/decreases counter, and changes the text accordingly
-	 */
-	setClock : function(){
-
-		if (this.countDown) this.decrementTime();
-		else this.incrementTime();
-
-		var text =this.options.format,
-			zero = this.options.leadingZero,
-			seconds = (zero) ? ( (this.time.s<10) ? '0' + this.time.s : this.time.s ) : this.time.s,
-			minutes = (zero) ? ( (this.time.m<10) ? '0' + this.time.m : this.time.m ) : this.time.m,
-			hours   = (zero) ? ( (this.time.h<10) ? '0' + this.time.h : this.time.h ) : this.time.h,
-			days    = (zero) ? ( (this.time.d<10) ? '0' + this.time.d : this.time.d ) : this.time.d;
-
-		text = text.substitute({
-			'D' : this.formats.full.substitute({
-				number : days,
-				word : this.options.lang.d[(days==1) ? 'single' : 'plural']
-			}),
-			'H' : this.formats.full.substitute({
-				number : hours,
-				word : this.options.lang.h[(hours==1) ? 'single' : 'plural']
-			}),
-			'M' : this.formats.full.substitute({
-				number : minutes,
-				word : this.options.lang.m[(minutes==1) ? 'single' : 'plural']
-			}),
-			'S' : this.formats.full.substitute({
-				number : seconds,
-				word : this.options.lang.s[(seconds==1) ? 'single' : 'plural']
-			}),
-			'd' : this.formats.shrt.substitute({
-				number : days,
-				word : this.options.lang.d[(days==1) ? 'single' : 'plural']
-			}),
-			'h' : this.formats.shrt.substitute({
-				number : hours, word : this.options.lang.h[(hours==1) ? 'single' : 'plural']
-			}),
-			'm' : this.formats.shrt.substitute({
-				number : minutes, word : this.options.lang.m[(minutes==1) ? 'single' : 'plural']
-			}),
-			's' : this.formats.shrt.substitute({
-				number : seconds, word : this.options.lang.s[(seconds==1) ? 'single' : 'plural']
-			})
-		});
-
-		this.container.set('html',text);
-	},
-
-	/**
-	 * Decrements time counter
-	 */
-	decrementTime : function(){
-		this.time.s--;
-		if (this.time.s<0){
-			this.time.s = this.stopTime.d ? 0 : 59;
-
-			if (!this.stopTime.s && this.time.s === 0 ) this.stopTime.s = true;
-			else this.time.m--;
-
-			if (this.time.m<0){
-				this.time.m = (this.stopTime.h) ? 0 : 59;
-
-				if (!this.stopTime.m && this.time.m === 0) this.stopTime.m = true;
-				else this.time.h--;
-
-				if (this.time.h<0){
-					this.time.h = (this.stopTime.d) ? 0 : 23;
-
-					if (!this.stopTime.h && this.time.h === 0) this.stopTime.h = true;
-					else this.time.d--;
-
-					if (!this.stopTime.d && this.time.d === 0) this.stopTime.d = true;
-				}
-			}
-		}
-
-		if (this.stopTime.s){
-			this.fireEvent('done');
-			if (this.options.onGoing) this.countDown = false;
-			else this.stop();
-		}
-	},
-
-	/**
-	 * Iecrements time counter
-	 */
-	incrementTime : function(){
-		this.time.s++;
-		if (this.time.s>59){
-			this.time.s=0;
-			this.time.m++;
-
-			if (this.time.m>59){
-				this.time.m=0;
-				this.time.h++;
-
-				if (this.time.h>23){
-					this.time.h = 0;
-					this.time.d++;
-				}
-			}
-		}
-	},
-
-	reset: function(){
-		this.setClock();
-
-		this.time = {d: 0, h: 0, m: 0, s: 0};
-		var text =this.options.format,
-			zero = this.options.leadingZero,
-			seconds = (zero) ? ( (this.time.s<10) ? '0' + this.time.s : this.time.s ) : this.time.s,
-			minutes = (zero) ? ( (this.time.m<10) ? '0' + this.time.m : this.time.m ) : this.time.m,
-			hours   = (zero) ? ( (this.time.h<10) ? '0' + this.time.h : this.time.h ) : this.time.h,
-			days    = (zero) ? ( (this.time.d<10) ? '0' + this.time.d : this.time.d ) : this.time.d;
-
-		text = text.substitute({
-			'D' : this.formats.full.substitute({
-				number : days,
-				word : this.options.lang.d[(days==1) ? 'single' : 'plural']
-			}),
-			'H' : this.formats.full.substitute({
-				number : hours,
-				word : this.options.lang.h[(hours==1) ? 'single' : 'plural']
-			}),
-			'M' : this.formats.full.substitute({
-				number : minutes,
-				word : this.options.lang.m[(minutes==1) ? 'single' : 'plural']
-			}),
-			'S' : this.formats.full.substitute({
-				number : seconds,
-				word : this.options.lang.s[(seconds==1) ? 'single' : 'plural']
-			}),
-			'd' : this.formats.shrt.substitute({
-				number : days,
-				word : this.options.lang.d[(days==1) ? 'single' : 'plural']
-			}),
-			'h' : this.formats.shrt.substitute({
-				number : hours, word : this.options.lang.h[(hours==1) ? 'single' : 'plural']
-			}),
-			'm' : this.formats.shrt.substitute({
-				number : minutes, word : this.options.lang.m[(minutes==1) ? 'single' : 'plural']
-			}),
-			's' : this.formats.shrt.substitute({
-				number : seconds, word : this.options.lang.s[(seconds==1) ? 'single' : 'plural']
-			})
-		});
-
-		this.container.set('html',text);
-	},
-
-	/**
-	 * Starts the counter. If supplied, will set a new target time
-	 *   @var {Date|Integer} A target date or a timestamp (in seconds) or a target date
-	 * @return this
-	 */
-	start : function(target_time){
-		this.stop();
-
-		if (target_time) this.setTargetTime(target_time);
-
-		this.setClock();
-		this.handle = this.setClock.periodical(1000);
-
-		return this;
-	},
-
-	/**
-	 * Stops the counter
-	 * @return this
-	 */
-	stop : function(){
-		clearInterval(this.handle);
-
-		return this;
-	},
-	toElement: function(){return this.container;}
+ * The Final Countdown for jQuery v2.2.0 (http://hilios.github.io/jQuery.countdown/)
+ * Copyright (c) 2016 Edson Hilios
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+(function(factory) {
+    "use strict";
+    if (typeof define === "function" && define.amd) {
+        define([ "jquery" ], factory);
+    } else {
+        factory(jQuery);
+    }
+})(function($) {
+    "use strict";
+    var instances = [], matchers = [], defaultOptions = {
+        precision: 100,
+        elapse: false,
+        defer: false
+    };
+    matchers.push(/^[0-9]*$/.source);
+    matchers.push(/([0-9]{1,2}\/){2}[0-9]{4}( [0-9]{1,2}(:[0-9]{2}){2})?/.source);
+    matchers.push(/[0-9]{4}([\/\-][0-9]{1,2}){2}( [0-9]{1,2}(:[0-9]{2}){2})?/.source);
+    matchers = new RegExp(matchers.join("|"));
+    function parseDateString(dateString) {
+        if (dateString instanceof Date) {
+            return dateString;
+        }
+        if (String(dateString).match(matchers)) {
+            if (String(dateString).match(/^[0-9]*$/)) {
+                dateString = Number(dateString);
+            }
+            if (String(dateString).match(/\-/)) {
+                dateString = String(dateString).replace(/\-/g, "/");
+            }
+            return new Date(dateString);
+        } else {
+            throw new Error("Couldn't cast `" + dateString + "` to a date object.");
+        }
+    }
+    var DIRECTIVE_KEY_MAP = {
+        Y: "years",
+        m: "months",
+        n: "daysToMonth",
+        d: "daysToWeek",
+        w: "weeks",
+        W: "weeksToMonth",
+        H: "hours",
+        M: "minutes",
+        S: "seconds",
+        D: "totalDays",
+        I: "totalHours",
+        N: "totalMinutes",
+        T: "totalSeconds"
+    };
+    function escapedRegExp(str) {
+        var sanitize = str.toString().replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
+        return new RegExp(sanitize);
+    }
+    function strftime(offsetObject) {
+        return function(format) {
+            var directives = format.match(/%(-|!)?[A-Z]{1}(:[^;]+;)?/gi);
+            if (directives) {
+                for (var i = 0, len = directives.length; i < len; ++i) {
+                    var directive = directives[i].match(/%(-|!)?([a-zA-Z]{1})(:[^;]+;)?/), regexp = escapedRegExp(directive[0]), modifier = directive[1] || "", plural = directive[3] || "", value = null;
+                    directive = directive[2];
+                    if (DIRECTIVE_KEY_MAP.hasOwnProperty(directive)) {
+                        value = DIRECTIVE_KEY_MAP[directive];
+                        value = Number(offsetObject[value]);
+                    }
+                    if (value !== null) {
+                        if (modifier === "!") {
+                            value = pluralize(plural, value);
+                        }
+                        if (modifier === "") {
+                            if (value < 10) {
+                                value = "0" + value.toString();
+                            }
+                        }
+                        format = format.replace(regexp, value.toString());
+                    }
+                }
+            }
+            format = format.replace(/%%/, "%");
+            return format;
+        };
+    }
+    function pluralize(format, count) {
+        var plural = "s", singular = "";
+        if (format) {
+            format = format.replace(/(:|;|\s)/gi, "").split(/\,/);
+            if (format.length === 1) {
+                plural = format[0];
+            } else {
+                singular = format[0];
+                plural = format[1];
+            }
+        }
+        if (Math.abs(count) > 1) {
+            return plural;
+        } else {
+            return singular;
+        }
+    }
+    var Countdown = function(el, finalDate, options) {
+        this.el = el;
+        this.$el = $(el);
+        this.interval = null;
+        this.offset = {};
+        this.options = $.extend({}, defaultOptions);
+        this.instanceNumber = instances.length;
+        instances.push(this);
+        this.$el.data("countdown-instance", this.instanceNumber);
+        if (options) {
+            if (typeof options === "function") {
+                this.$el.on("update.countdown", options);
+                this.$el.on("stoped.countdown", options);
+                this.$el.on("finish.countdown", options);
+            } else {
+                this.options = $.extend({}, defaultOptions, options);
+            }
+        }
+        this.setFinalDate(finalDate);
+        if (this.options.defer === false) {
+            this.start();
+        }
+    };
+    $.extend(Countdown.prototype, {
+        start: function() {
+            if (this.interval !== null) {
+                clearInterval(this.interval);
+            }
+            var self = this;
+            this.update();
+            this.interval = setInterval(function() {
+                self.update.call(self);
+            }, this.options.precision);
+        },
+        stop: function() {
+            clearInterval(this.interval);
+            this.interval = null;
+            this.dispatchEvent("stoped");
+        },
+        toggle: function() {
+            if (this.interval) {
+                this.stop();
+            } else {
+                this.start();
+            }
+        },
+        pause: function() {
+            this.stop();
+        },
+        resume: function() {
+            this.start();
+        },
+        remove: function() {
+            this.stop.call(this);
+            instances[this.instanceNumber] = null;
+            delete this.$el.data().countdownInstance;
+        },
+        setFinalDate: function(value) {
+            this.finalDate = parseDateString(value);
+        },
+        update: function() {
+            if (this.$el.closest("html").length === 0) {
+                this.remove();
+                return;
+            }
+            var hasEventsAttached = $._data(this.el, "events") !== undefined, now = new Date(), newTotalSecsLeft;
+            newTotalSecsLeft = this.finalDate.getTime() - now.getTime();
+            newTotalSecsLeft = Math.ceil(newTotalSecsLeft / 1e3);
+            newTotalSecsLeft = !this.options.elapse && newTotalSecsLeft < 0 ? 0 : Math.abs(newTotalSecsLeft);
+            if (this.totalSecsLeft === newTotalSecsLeft || !hasEventsAttached) {
+                return;
+            } else {
+                this.totalSecsLeft = newTotalSecsLeft;
+            }
+            this.elapsed = now >= this.finalDate;
+            this.offset = {
+                seconds: this.totalSecsLeft % 60,
+                minutes: Math.floor(this.totalSecsLeft / 60) % 60,
+                hours: Math.floor(this.totalSecsLeft / 60 / 60) % 24,
+                days: Math.floor(this.totalSecsLeft / 60 / 60 / 24) % 7,
+                daysToWeek: Math.floor(this.totalSecsLeft / 60 / 60 / 24) % 7,
+                daysToMonth: Math.floor(this.totalSecsLeft / 60 / 60 / 24 % 30.4368),
+                weeks: Math.floor(this.totalSecsLeft / 60 / 60 / 24 / 7),
+                weeksToMonth: Math.floor(this.totalSecsLeft / 60 / 60 / 24 / 7) % 4,
+                months: Math.floor(this.totalSecsLeft / 60 / 60 / 24 / 30.4368),
+                years: Math.abs(this.finalDate.getFullYear() - now.getFullYear()),
+                totalDays: Math.floor(this.totalSecsLeft / 60 / 60 / 24),
+                totalHours: Math.floor(this.totalSecsLeft / 60 / 60),
+                totalMinutes: Math.floor(this.totalSecsLeft / 60),
+                totalSeconds: this.totalSecsLeft
+            };
+            if (!this.options.elapse && this.totalSecsLeft === 0) {
+                this.stop();
+                this.dispatchEvent("finish");
+            } else {
+                this.dispatchEvent("update");
+            }
+        },
+        dispatchEvent: function(eventName) {
+            var event = $.Event(eventName + ".countdown");
+            event.finalDate = this.finalDate;
+            event.elapsed = this.elapsed;
+            event.offset = $.extend({}, this.offset);
+            event.strftime = strftime(this.offset);
+            this.$el.trigger(event);
+        }
+    });
+    $.fn.countdown = function() {
+        var argumentsArray = Array.prototype.slice.call(arguments, 0);
+        return this.each(function() {
+            var instanceNumber = $(this).data("countdown-instance");
+            if (instanceNumber !== undefined) {
+                var instance = instances[instanceNumber], method = argumentsArray[0];
+                if (Countdown.prototype.hasOwnProperty(method)) {
+                    instance[method].apply(instance, argumentsArray.slice(1));
+                } else if (String(method).match(/^[$A-Z_][0-9A-Z_$]*$/i) === null) {
+                    instance.setFinalDate.call(instance, method);
+                    instance.start();
+                } else {
+                    $.error("Method %s does not exist on jQuery.countdown".replace(/\%s/gi, method));
+                }
+            } else {
+                new Countdown(this, argumentsArray[0], argumentsArray[1]);
+            }
+        });
+    };
 });

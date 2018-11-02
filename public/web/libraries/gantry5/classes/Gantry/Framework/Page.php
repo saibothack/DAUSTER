@@ -1,9 +1,8 @@
 <?php
-
 /**
  * @package   Gantry5
  * @author    RocketTheme http://www.rockettheme.com
- * @copyright Copyright (C) 2007 - 2015 RocketTheme, LLC
+ * @copyright Copyright (C) 2007 - 2017 RocketTheme, LLC
  * @license   GNU/GPLv2 and later
  *
  * http://www.gnu.org/licenses/gpl-2.0.html
@@ -13,11 +12,16 @@ namespace Gantry\Framework;
 
 class Page extends Base\Page
 {
+    public $home;
+    public $outline;
+    public $language;
+    public $direction;
+
+    // Joomla specific properties.
     public $theme;
     public $baseUrl;
     public $title;
     public $description;
-    public $direction;
 
     public function __construct($container)
     {
@@ -32,24 +36,30 @@ class Page extends Base\Page
         $this->view     = $input->getCmd('view', '');
         $this->layout   = $input->getCmd('layout', '');
         $this->task     = $input->getCmd('task', '');
-        $this->itemid   = $input->getCmd('Itemid', '');
+        $this->itemid   = $input->getInt('Itemid', 0);
         $this->printing = $input->getCmd('print', '');
 
         $this->class = '';
         if ($this->itemid) {
             $menuItem = $app->getMenu()->getActive();
             if ($menuItem && $menuItem->id) {
+                $this->home = (bool) $menuItem->home;
                 $this->class = $menuItem->params->get('pageclass_sfx', '');
             }
         }
         $templateParams = $app->getTemplate(true);
-        $this->outline = $templateParams->params->get('configuration', !empty($templateParams->id) ? $templateParams->id : 0);
+        $this->outline = Gantry::instance()['configuration'];
         $this->sitename = $app->get('sitename');
         $this->theme = $templateParams->template;
         $this->baseUrl = \JUri::base(true);
         $this->title = $document->title;
         $this->description = $document->description;
-        $this->language = $document->language;
+
+        // Document has lower case language code, which causes issues with some JS scripts (Snipcart). Use tag instead.
+        $code = explode('-', $document->getLanguage(), 2);
+        $language =  array_shift($code);
+        $country = strtoupper(array_shift($code));
+        $this->language = $language . ($country ? '-' . $country : '');
         $this->direction = $document->direction;
     }
 
@@ -90,7 +100,7 @@ class Page extends Base\Page
         if ($this->itemid) $classes[] = 'itemid-' . $this->itemid;
         if ($this->outline) $classes[] = 'outline-' . $this->outline;
 
-        $baseAttributes = (array) $this->config->get('page.body', []);
+        $baseAttributes = (array) $this->config->get('page.body.attribs', []);
         if (!empty($baseAttributes['class'])) {
             $baseAttributes['class'] = array_merge((array) $baseAttributes['class'], $classes);
         } else {

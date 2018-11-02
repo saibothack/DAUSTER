@@ -1,13 +1,18 @@
 name: Swiper
 description: Display swiper.
 type: particle
+icon: fa-newspaper-o
+
+configuration:
+  caching:
+    type: static
 
 form:
   fields:
     enabled:
       type: input.checkbox
       label: Enabled
-      description: Globally enable icon menu particles.
+      description: Globally enable particles.
       default: true
 
     class:
@@ -41,13 +46,25 @@ form:
       type: input.text
       label: Element Height
       description: Set the Element Height if you choose Horizontal or Vertical Slides layout
-      placeholder: 200px
+      placeholder: 600px
+
+    elementHeightMobile:
+      type: input.text
+      label: Mobile Element Height
+      description: Set the Element Height if you choose Horizontal or Vertical Slides layout
+      placeholder: 300px
 
     slidesPerView:
       type: input.text
       label: Slide per View
       description: Set the amount for the Slide per View for Carousel layout
-      placeholder: 2      
+      placeholder: 2
+
+    slidesPerViewMobile:
+      type: input.text
+      label: Slide per View for Mobile
+      description: Set the amount for the Slide per View for Carousel layout
+      placeholder: 1
 
     items:
       type: collection.list
@@ -64,7 +81,7 @@ form:
           description: Select desired image.
         .subtitle:
           type: input.text
-          label: SubTitle          
+          label: SubTitle
         .title:
           type: input.text
           label: Title
@@ -73,7 +90,7 @@ form:
           label: Link
         .linktext:
           type: input.text
-          label: Link Text       
+          label: Link Text
         .desc:
           type: textarea.textarea
           label: Description

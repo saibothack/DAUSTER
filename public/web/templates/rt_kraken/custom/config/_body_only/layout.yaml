@@ -1,0 +1,27 @@
+version: 2
+preset:
+  image: 'gantry-admin://images/layouts/body-only.png'
+  name: _body_only
+  timestamp: 1541184822
+layout:
+  /body/:
+    -
+      - system-messages-3656
+    -
+      - system-content-5217
+  offcanvas: {  }
+structure:
+  body:
+    type: section
+    attributes:
+      boxed: 1
+  offcanvas:
+    attributes:
+      id: g-offcanvas
+content:
+  system-messages-3656:
+    layout: false
+    block:
+      variations: 'nomarginall nopaddingall'
+  system-content-5217:
+    layout: false

@@ -1,6 +1,11 @@
 name: Grid Content
 description: Display Grid Content.
 type: particle
+icon: fa-table
+
+configuration:
+  caching:
+    type: static
 
 form:
   fields:

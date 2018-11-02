@@ -1,6 +1,11 @@
 name: Logo
 description: Display a logo.
 type: particle
+icon: fa-file-image-o
+
+configuration:
+  caching:
+    type: static
 
 form:
   fields:

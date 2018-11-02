@@ -1,9 +1,10 @@
 name: _error
-timestamp: 1536385015
+timestamp: 1541184823
+version: 7
 preset:
   image: 'gantry-admin://images/layouts/error.png'
   name: _error
-  timestamp: 1536385015
+  timestamp: 1541184822
 positions:
   top-a: 'Top A'
   top-b: 'Top B'
@@ -44,3 +45,91 @@ positions:
   footer-b: 'Footer B'
   footer-c: 'Footer C'
   fixedside: 'Module Position'
+sections:
+  top: Top
+  navigation: Navigation
+  showcase: Showcase
+  above: Above
+  utility: Utility
+  feature: Feature
+  sidebar: Sidebar
+  mainbar: Mainbar
+  expanded: Expanded
+  extension: Extension
+  bottom: Bottom
+  copyright: Copyright
+  fixedside: FixedSide
+  header: Header
+  aside: Aside
+  footer: Footer
+  offcanvas: Offcanvas
+particles:
+  messages:
+    system-messages-3753: 'System Messages'
+  position:
+    position-9904: 'Top A'
+    position-7747: 'Top B'
+    position-3854: 'Top C'
+    position-1785: 'Navigation A'
+    position-4301: 'Navigation B'
+    position-8755: 'Navigation C'
+    position-5766: 'Header A'
+    position-3536: 'Header B'
+    position-7828: 'Header C'
+    position-3475: 'Showcase A'
+    position-6265: 'Showcase B'
+    position-2557: 'Showcase C'
+    position-5634: 'Above A'
+    position-7199: 'Above B'
+    position-1518: 'Above C'
+    position-3713: 'Utility A'
+    position-4156: 'Utility B'
+    position-6926: 'Utility C'
+    position-5504: 'Feature A'
+    position-8519: 'Feature B'
+    position-7244: 'Feature C'
+    position-4744: Sidebar
+    position-6690: 'Mainbar A'
+    position-7362: 'Mainbar B'
+    position-4149: 'Mainbar C'
+    position-7162: Aside
+    position-5293: 'Expanded A'
+    position-4933: 'Expanded B'
+    position-5715: 'Expanded C'
+    position-6951: 'Extension A'
+    position-7131: 'Extension B'
+    position-6977: 'Extension C'
+    position-8527: 'Bottom A'
+    position-8819: 'Bottom B'
+    position-5104: 'Bottom C'
+    position-9770: 'Footer A'
+    position-4697: 'Footer B'
+    position-2701: 'Footer C'
+    position-1137: 'Module Position'
+  logo:
+    logo-2076: Logo
+    logo-2976: Logo
+    logo-2013: Logo
+    logo-4285: Logo
+  menu:
+    menu-1503: Menu
+  infolist:
+    infolist-5120: 'Whooops! Error!'
+    infolist-9698: 'Nothing to See Here'
+  content:
+    system-content-8558: 'Page Content'
+  horizontalmenu:
+    horizontalmenu-7850: 'Horizontal Menu'
+  social:
+    social-1891: Social
+    social-8431: Social
+    social-8421: Social
+  branding:
+    branding-7769: Branding
+  copyright:
+    copyright-9373: Copyright
+  totop:
+    totop-9014: 'To Top'
+  mobile-menu:
+    mobile-menu-1074: 'Mobile Menu'
+inherit: {  }

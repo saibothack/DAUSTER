@@ -47,19 +47,21 @@
 			display: inline-block;
 			vertical-align: middle;
 		}
-		.g-style-preset7 &, .g-style-preset8 & {
-			img {
-				display: none;
-			}
-			span {
-				&:before {
-					content: "";
-					display: inline-block;
-					width: 48px;
-					height: 48px;
-					vertical-align: -0.85rem;
-					background: url("gantry-theme://images/logo/logo.png") no-repeat;					
-				}				
+    &.g-logo-alt {
+  		.g-style-preset7 &, .g-style-preset8 & {
+  			img {
+  				display: none;
+  			}
+  			span {
+  				&:before {
+  					content: "";
+  					display: inline-block;
+  					width: 48px;
+  					height: 48px;
+  					vertical-align: -0.85rem;
+  					background: url("gantry-theme://images/logo/logo.png") no-repeat;
+  				}
+        }
 			}
 		}	
 	}

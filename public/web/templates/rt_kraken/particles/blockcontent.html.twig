@@ -1,9 +1,11 @@
 {% extends '@nucleus/partials/particle.html.twig' %}
 
+{% do gantry.load('lightcase.init') %}
+
 {% block particle %}
 <div class="{{ particle.class|e }}">
   <div class="g-blockcontent">
-    {% if particle.title %}<h2 class="g-title">{{ particle.title|raw }}</h2>{% endif %} 
+    {% if particle.title %}<h2 class="g-title">{{ particle.title|raw }}</h2>{% endif %}
 
     {% if particle.image or particle.headline or particle.description or particle.linktext %}
     <div class="g-grid">
@@ -21,8 +23,8 @@
       {% for subcontent in particle.subcontents %}
         <div class="g-block {{ subcontent.class }}">
           <div class="g-content">
-            {% if subcontent.rokboximage %}<a data-rokbox="" data-rokbox-caption="{{ subcontent.rokboxcaption|e }}" href="{{ url(subcontent.rokboximage) }}">{% endif %}
-            {% if subcontent.img %}<img src="{{ url(subcontent.img) }}" class="g-blockcontent-subcontent-img" alt="{{ subcontent.title|e }}" />{% endif %}
+            {% if subcontent.rokboximage %}<a data-rel="lightcase" title="{{ subcontent.rokboxcaption|e }}" href="{{ url(subcontent.rokboximage) }}">{% endif %}
+            {% if subcontent.img %}<img src="{{ url(subcontent.img) }}" class="g-blockcontent-subcontent-img" alt="{{ subcontent.subtitle|e }}" />{% endif %}
             {% if subcontent.rokboximage %}</a>{% endif %}
             {% if subcontent.subtitle %} <div class="g-blockcontent-subcontent-subtitle">{{ subcontent.subtitle|raw }}</div> {% endif %}
             {% if subcontent.name %}<h4 class="g-blockcontent-subcontent-title">{% if subcontent.icon %}<i class="{{ subcontent.icon }} g-blockcontent-icons"></i> {% endif %}{{ subcontent.name|raw }}</h4>{% endif %}

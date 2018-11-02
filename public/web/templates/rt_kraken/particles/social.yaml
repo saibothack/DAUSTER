@@ -1,6 +1,11 @@
 name: Social
 description: Display social buttons.
 type: particle
+icon: fa-facebook
+
+configuration:
+  caching:
+    type: static
 
 form:
   fields:

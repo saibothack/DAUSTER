@@ -161,4 +161,9 @@
   &.odometer-auto-theme .odometer-value, &.odometer-theme-default .odometer-value {
     text-align: center;
   }
+  &.odometer-auto-theme .odometer-inside {
+    .dir-rtl & {
+      direction: ltr;
+    }
+  }
 }

@@ -1,6 +1,6 @@
 #g-aside {
     background: $main-background;
-    color: $main-text-color;  
+    color: $main-text-color;
 
     // Home
     .g-home &, .g-homepositions & {
@@ -40,19 +40,19 @@
                 margin: 0 1rem;
                 padding: 0;
             }
-        }   
+        }
         .g-blockcontent-subcontent-title {
             color: $main-text-color;
-        }     
+        }
 
         // Swiper
         .g-swiper-stories {
             .swiper-slide-content-text {
-                background: $main-text-color;  
-                color: $main-background;
-            }         
-        }    
-    }    
+                background: $main-background;
+                color: $main-text-color
+            }
+        }
+    }
 }
 
 @media print {

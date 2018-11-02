@@ -27,6 +27,7 @@ $navigation-text-color:			#272c35 !default;
 // Header
 $header-background:				#ffffff !default;
 $header-text-color:				#272c35 !default;
+$header-background-image:		false !default;
 
 // Showcase
 $showcase-background:			#ffffff !default;
@@ -75,7 +76,7 @@ $fixedside-text-color:			#ffffff !default;
 // Off Canvas
 $offcanvas-background:			#272c35 !default;
 $offcanvas-text-color:			#ffffff !default;
-$offcanvas-toggle-color:		#ffffff !default;
+$offcanvas-toggle-color:		#dddddd !default;
 
 // Block Variations
 $box1-background:				$accent-color-1 !default;

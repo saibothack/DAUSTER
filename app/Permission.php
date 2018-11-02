@@ -26,7 +26,9 @@ class Permission extends \Spatie\Permission\Models\Permission
             'Tipo usuarios',
             'Cargos',
             'Alta servicio',
-            'Administración servicios',
+            'Mi perfil',
+            'Facturas',
+            'Tarjetas',
         ];
     }
 }

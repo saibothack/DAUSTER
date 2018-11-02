@@ -1,9 +1,8 @@
 <?php
-
 /**
  * @package   Gantry5
  * @author    RocketTheme http://www.rockettheme.com
- * @copyright Copyright (C) 2007 - 2015 RocketTheme, LLC
+ * @copyright Copyright (C) 2007 - 2017 RocketTheme, LLC
  * @license   GNU/GPLv2 and later
  *
  * http://www.gnu.org/licenses/gpl-2.0.html
@@ -14,7 +13,9 @@ namespace Gantry\Framework;
 use Gantry\Admin\ThemeList;
 use Gantry\Component\Filesystem\Folder;
 use Gantry\Framework\Base\Platform as BasePlatform;
-use Joomla\Registry\Registry;
+use Gantry\Joomla\Category\CategoryFinder;
+use Gantry\Joomla\Content\Content;
+use Gantry\Joomla\Content\ContentFinder;
 
 /**
  * The Platform Configuration class contains configuration information.
@@ -25,11 +26,57 @@ use Joomla\Registry\Registry;
 
 class Platform extends BasePlatform
 {
-    public $no_base_layout = true;
+    public $no_base_layout = false;
+    public $module_wrapper = '<div class="platform-content">%s</div>';
+    public $component_wrapper = '<div class="platform-content row-fluid"><div class="span12">%s</div></div>';
 
     protected $name = 'joomla';
+    protected $features = ['modules' => true];
     protected $settings_key = 'return';
     protected $modules;
+
+
+    public function setModuleWrapper($html)
+    {
+        $this->module_wrapper = $html;
+    }
+
+    public function setComponentWrapper($html)
+    {
+        $this->component_wrapper = $html;
+    }
+
+    public function init()
+    {
+        // Support linked sample data.
+        $theme = isset($this->container['theme.name']) ? $this->container['theme.name'] : null;
+        if ($theme && is_dir(JPATH_ROOT . "/media/gantry5/themes/{$theme}/media-shared")) {
+            $custom = JPATH_ROOT . "/media/gantry5/themes/{$theme}/custom";
+            if (!is_dir($custom)) {
+                // First run -- copy configuration into a single location.
+                $shared = JPATH_ROOT . "/media/gantry5/themes/{$theme}/template-shared";
+                $demo = JPATH_ROOT . "/media/gantry5/themes/{$theme}/template-demo";
+
+                try {
+                    Folder::create($custom);
+                } catch (\Exception $e) {
+                    throw new \RuntimeException(sprintf("Failed to create folder '%s'.", $custom), 500, $e);
+                }
+
+                if (is_dir("{$shared}/custom/config")) {
+                    Folder::copy("{$shared}/custom/config", "{$custom}/config");
+                }
+                if (is_dir("{$demo}/custom/config")) {
+                    Folder::copy("{$demo}/custom/config", "{$custom}/config");
+                }
+            }
+            array_unshift($this->items['streams']['gantry-theme']['prefixes'][''], "media/gantry5/themes/{$theme}/template-shared");
+            array_unshift($this->items['streams']['gantry-theme']['prefixes'][''], "media/gantry5/themes/{$theme}/template-demo");
+            array_unshift($this->items['streams']['gantry-theme']['prefixes'][''], "media/gantry5/themes/{$theme}/custom");
+        }
+
+        return parent::init();
+    }
 
     public function getCachePath()
     {
@@ -48,7 +95,22 @@ class Platform extends BasePlatform
 
     public function getMediaPaths()
     {
-        return ['' => ['gantry-theme://images', 'images', 'media/gantry5']];
+        $paths = ['images'];
+
+        // Support linked sample data.
+        $theme = isset($this->container['theme.name']) ? $this->container['theme.name'] : null;
+        if ($theme && is_dir(JPATH_ROOT . "/media/gantry5/themes/{$theme}/media-shared")) {
+            array_unshift($paths, "media/gantry5/themes/{$theme}/media-shared");
+            array_unshift($paths, "media/gantry5/themes/{$theme}/media-demo");
+        }
+
+        if ($this->container['global']->get('use_media_folder', false)) {
+            array_push($paths, 'gantry-theme://images');
+        } else {
+            array_unshift($paths, 'gantry-theme://images');
+        }
+
+        return ['' => $paths];
     }
 
     public function getEnginesPaths()
@@ -70,15 +132,33 @@ class Platform extends BasePlatform
         return ['' => ['gantry-theme://', 'media/gantry5/assets']];
     }
 
+    /**
+     * Get preview url for individual theme.
+     *
+     * @param string $theme
+     * @return string
+     */
+    public function getThemePreviewUrl($theme)
+    {
+        return (string)(int) $theme === (string) $theme ? \JUri::root(false) . 'index.php?templateStyle=' . $theme : null;
+    }
+
+    /**
+     * Get administrator url for individual theme.
+     *
+     * @param string $theme
+     * @return string
+     */
+    public function getThemeAdminUrl($theme)
+    {
+        $token = \JSession::getFormToken();
+        return \JRoute::_("index.php?option=com_gantry5&view=configurations/default/styles&theme={$theme}&{$token}=1" , false);
+    }
+
     public function filter($text)
     {
         \JPluginHelper::importPlugin('content');
         return \JHtml::_('content.prepare', $text, '', 'mod_custom.content');
-    }
-
-    public function finalize()
-    {
-        Document::registerAssets();
     }
 
     public function countModules($position)
@@ -108,8 +188,10 @@ class Platform extends BasePlatform
         }
 
         $isGantry = \strpos($module->module, 'gantry5') !== false;
+        $content = isset($module->content) ? $module->content : null;
 
         $renderer = $document->loadRenderer('module');
+
         $html = trim($renderer->render($module, $attribs));
 
         // Add frontend editing feature as it has only been defined for module positions.
@@ -119,7 +201,7 @@ class Platform extends BasePlatform
         $frontEditing = ($app->isSite() && $app->get('frontediting', 1) && !$user->guest);
         $menusEditing = ($app->get('frontediting', 1) == 2) && $user->authorise('core.edit', 'com_menus');
 
-        if ($frontEditing && $html && $user->authorise('module.edit.frontend', 'com_modules.module.' . $module->id)) {
+        if (!$isGantry && $frontEditing && $html && $user->authorise('module.edit.frontend', 'com_modules.module.' . $module->id)) {
             $displayData = [
                 'moduleHtml' => &$html,
                 'module' => $module,
@@ -129,9 +211,12 @@ class Platform extends BasePlatform
             \JLayoutHelper::render('joomla.edit.frontediting_modules', $displayData);
         }
 
+        // Work around Joomla "issue" which corrupts content of custom html module (last checked J! 3.6.5).
+        $module->content = $content;
+
         if ($html && !$isGantry) {
             $this->container['theme']->joomla(true);
-            return '<div class="platform-content">' . $html . '</div>';
+            return sprintf($this->module_wrapper, $html);
         }
 
         return $html;
@@ -173,13 +258,13 @@ class Platform extends BasePlatform
 
         if ($html && !$isGantry) {
             $this->container['theme']->joomla(true);
-            return '<div class="platform-content">' . $html . '</div>';
+            return sprintf($this->component_wrapper, $html);
         }
 
         return $html;
     }
 
-    protected function getModule($id)
+    public function getModule($id)
     {
         $modules = $this->getModuleList();
         return $id && isset($modules[$id]) ? $modules[$id] : null;
@@ -242,6 +327,10 @@ class Platform extends BasePlatform
 
     public function settings()
     {
+        if (!$this->authorize('platform.settings.manage')) {
+            return '';
+        }
+
         return \JRoute::_('index.php?option=com_config&view=component&component=com_gantry5', false);
     }
 
@@ -252,6 +341,10 @@ class Platform extends BasePlatform
 
     public function updates()
     {
+        if (!$this->authorize('updates.manage')) {
+            return [];
+        }
+
         $styles = ThemeList::getThemes();
 
         $extension_ids = array_unique(array_map(
@@ -275,11 +368,11 @@ class Platform extends BasePlatform
 
         $list = [];
         foreach ($updates as $update) {
-            if ($update->element == 'pkg_gantry5') {
+            if ($update->element === 'pkg_gantry5') {
                 // Rename Gantry 5 package.
                 $update->name = 'Gantry';
-                // Ignore git and CI installs.
-                if (version_compare(GANTRY5_VERSION, 0) < 0) {
+                // Ignore git and CI installs and if the Gantry version is the same or higher than in the updates.
+                if (version_compare(GANTRY5_VERSION, 0) < 0 || version_compare($update->version, GANTRY5_VERSION) <= 0) {
                     continue;
                 }
             } else {
@@ -330,10 +423,92 @@ class Platform extends BasePlatform
         return call_user_func_array(['JHtml', '_'], $args);
     }
 
-    public function call()
+    public function article($keys)
     {
-        $args = func_get_args();
-        $callable = array_shift($args);
-        return is_callable($callable) ? call_user_func_array($callable, $args) : null;
+        return Content::getInstance($keys);
+    }
+
+    public function finder($domain, $options = null)
+    {
+        $options = (array) $options;
+        switch ($domain) {
+            case 'article':
+            case 'articles':
+            case 'content':
+                $finder = new ContentFinder($options);
+
+                return \JFactory::getApplication()->isSite() ? $finder->authorised() : $finder;
+            case 'category':
+            case 'categories':
+                $finder = (new CategoryFinder($options))->extension('content');
+
+                return \JFactory::getApplication()->isSite() ? $finder->authorised() : $finder;
+        }
+
+        return null;
+    }
+
+    public function truncate($text, $length, $html = false)
+    {
+        return \JHtml::_('string.truncate', $text, $length, true, $html);
+    }
+
+    public function authorize($action, $id = null)
+    {
+        $user = \JFactory::getUser();
+
+        switch ($action) {
+            case 'platform.settings.manage':
+                return $user->authorise('core.admin', 'com_templates') || $user->authorise('core.admin', 'com_gantry5');
+            case 'menu.manage':
+                return $user->authorise('core.manage', 'com_menus') && $user->authorise('core.edit', 'com_menus');
+            case 'menu.edit':
+                if ($id) {
+                    $db = \JFactory::getDbo();
+                    $userId = \JFactory::getUser()->id;
+
+                    // Verify that no items are checked out.
+                    $query = $db->getQuery(true)
+                        ->select('id')
+                        ->from('#__menu')
+                        ->where('menutype=' . $db->quote($id))
+                        ->where('checked_out !=' . (int) $userId)
+                        ->where('checked_out !=0');
+                    $db->setQuery($query);
+
+                    if ($db->loadRowList()) {
+                        return false;
+                    }
+
+                    // Verify that no module for this menu are checked out.
+                    $query->clear()
+                        ->select('id')
+                        ->from('#__modules')
+                        ->where('module=' . $db->quote('mod_menu'))
+                        ->where('params LIKE ' . $db->quote('%"menutype":' . json_encode($id) . '%'))
+                        ->where('checked_out !=' . (int) $userId)
+                        ->where('checked_out !=0');
+                    $db->setQuery($query);
+
+                    if ($db->loadRowList()) {
+                        return false;
+                    }
+                }
+                return $user->authorise('core.edit', 'com_menus');
+            case 'updates.manage':
+                return $user->authorise('core.manage', 'com_installer');
+            case 'outline.create':
+                return $user->authorise('core.create', 'com_templates');
+            case 'outline.delete':
+                 return $user->authorise('core.delete', 'com_templates');
+            case 'outline.rename':
+                return $user->authorise('core.edit', 'com_templates');
+            case 'outline.assign':
+                return $user->authorise('core.edit.state', 'com_templates') && $user->authorise('core.edit', 'com_menu');
+            case 'outline.edit':
+                return true;
+        }
+
+        return true;
     }
 }

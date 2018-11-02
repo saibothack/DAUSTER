@@ -1,6 +1,7 @@
 name: Side Menu
 description: Gantry Side Menu
 type: particle
+icon: fa-align-left
 
 form:
   fields:

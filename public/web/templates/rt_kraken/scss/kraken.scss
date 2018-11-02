@@ -5,6 +5,9 @@
 
 // THEME COMPONENTS
 
+// Base
+@import "nucleus/theme/base";
+
 // Core
 @import "kraken/core";
 
@@ -79,6 +82,9 @@
 
 // Social
 @import "kraken/social";
+
+// Content Array
+@import "kraken/contentarray";
 
 // Off Canvas
 @import "kraken/offcanvas";

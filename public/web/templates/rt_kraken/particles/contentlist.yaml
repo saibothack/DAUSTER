@@ -1,13 +1,18 @@
 name: Content List
 description: Display content list content.
 type: particle
+icon: fa-th-list
+
+configuration:
+  caching:
+    type: static
 
 form:
   fields:
     enabled:
       type: input.checkbox
       label: Enabled
-      description: Globally enable icon menu particles.
+      description: Globally enable particles.
       default: true
 
     class:
