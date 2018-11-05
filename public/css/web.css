@@ -432,3 +432,7 @@ select:hover {
     border-color: #ffffff;
     border-radius: 100%;
 }
+
+.text-uppercase {
+    text-transform: uppercase;
+}

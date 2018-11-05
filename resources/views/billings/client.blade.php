@@ -82,16 +82,30 @@
 
                                                             <div class="row">
                                                                 <div class="col-sm-12">
-                                                                    <h3>Mi dirección</h3>
+                                                                    <h3>Datos de facturación</h3>
                                                                     <label>* Campos requeridos</label>
                                                                 </div>
                                                             </div>
 
-                                                            @IF(isset($address))
-                                                                {{ Form::model($address, array('route' => array('address.update', $address->id), 'method' => 'PUT')) }}
+                                                            @IF(isset($billing))
+                                                                {{ Form::model($billing, array('route' => array('billings.update', $billing->id), 'method' => 'PUT')) }}
                                                             @ELSE
-                                                                {{ Form::open(array('url' => 'address')) }}
+                                                                {{ Form::open(array('url' => 'billings')) }}
                                                             @ENDIF
+
+                                                            <div class="form-group row">
+                                                                {{Form::label('RFC', 'RFC *', array('class' => 'col-sm-4 col-form-label text-right'))}}
+                                                                <div class="col-sm-8">
+                                                                    {{ Form::text('RFC', null, array('class' => 'form-control text-uppercase', 'required' => 'required')) }}
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group row">
+                                                                {{Form::label('name', 'Razón social *', array('class' => 'col-sm-4 col-form-label text-right'))}}
+                                                                <div class="col-sm-8">
+                                                                    {{ Form::text('name', null, array('class' => 'form-control text-uppercase', 'required' => 'required')) }}
+                                                                </div>
+                                                            </div>
 
                                                             <div class="form-group row">
                                                                 {{Form::label('street', 'Calle *', array('class' => 'col-sm-4 col-form-label text-right'))}}
@@ -128,9 +142,23 @@
                                                             </div>
 
                                                             <div class="form-group row">
+                                                                {{Form::label('colony', 'Colonia *', array('class' => 'col-sm-4 col-form-label text-right'))}}
+                                                                <div class="col-sm-8">
+                                                                    {{ Form::text('colony', null, array('class' => 'form-control', 'required' => 'required')) }}
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group row">
                                                                 {{Form::label('location', 'Localidad *', array('class' => 'col-sm-4 col-form-label text-right'))}}
                                                                 <div class="col-sm-8">
                                                                     {{ Form::text('location', null, array('class' => 'form-control', 'required' => 'required')) }}
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group row">
+                                                                {{Form::label('city', 'Ciudad *', array('class' => 'col-sm-4 col-form-label text-right'))}}
+                                                                <div class="col-sm-8">
+                                                                    {{ Form::text('city', null, array('class' => 'form-control', 'required' => 'required')) }}
                                                                 </div>
                                                             </div>
 
@@ -180,10 +208,9 @@
 
                                                                 <div class="vertical-menu">
                                                                     <a href="{{ route('profilers.index') }}" >Mis Datos</a>
-                                                                    <a href="{{ route('address.index') }}" class="active">Mi dirección</a>
-                                                                    <a href="{{ route('billings.index') }}">Datos de facturación</a>
+                                                                    <a href="{{ route('address.index') }}" >Mi dirección</a>
+                                                                    <a href="{{ route('billings.index') }}" class="active">Datos de facturación</a>
                                                                     <a href="{{ route('cards.index') }}">Mis tarjetas</a>
-
                                                                     <a href="{{ route('cards.index') }}">Eliminar mi cuenta</a>
                                                                 </div>
                                                             </div>
@@ -209,7 +236,7 @@
 @endsection
 
 @section('scripts')
-    <script src="{{asset('/js/addresses/client.js.')}}" type="text/javascript"></script>
+    <script src="{{asset('/js/billings/client.js.')}}" type="text/javascript"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDNSjUu5ZcMxNVYAICYDbdYUQDfKos0KZE&callback=init&region=MX&libraries=places" async defer></script>
 @endsection
 

@@ -15,6 +15,30 @@ class CreateBillingsTable extends Migration
     {
         Schema::create('billings', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('RFC');
+            $table->string('name');
+            $table->string('street');
+            $table->string('exterior');
+            $table->string('interior')->nullable();
+            $table->string('cp');
+            $table->string('location');
+            $table->string('colony');
+            $table->string('city');
+            $table->unsignedInteger('users_id');
+            $table->foreign('users_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
+            $table->unsignedInteger('countries_id');
+            $table->foreign('countries_id')
+                ->references('id')
+                ->on('countries')
+                ->onDelete('cascade');
+            $table->unsignedInteger('states_id');
+            $table->foreign('states_id')
+                ->references('id')
+                ->on('states')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -26,6 +50,5 @@ class CreateBillingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('billings');
     }
 }

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use Mail;
 use Input;
 use App\User;
 use App\Role;
 use App\KindPersons;
+use App\Mail\sendMail;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -174,7 +176,7 @@ class UserController extends Controller
         $request->flashExcept('password_confirmation');
 
         $this->validate($request, [
-            'kindPerson' => 'required|int',
+            'kind_persons_id' => 'required|int',
             'name' => 'required|string|max:255',
             'surnames' => 'required|string|max:255',
             'birthday' => 'required|date|max:255',
@@ -183,10 +185,31 @@ class UserController extends Controller
             'password'=>'required|min:6|confirmed',
         ]);
 
-        $data = $request->only('name', 'surnames', 'birthday', 'email', 'phone', 'role', 'kindPerson', 'password');
+        $data = $request->only('name', 'surnames', 'birthday', 'email', 'phone', 'role', 'kind_persons_id', 'password');
         $data["authorized"] = 1;
 
-        User::create($data);
+        $authUser = User::create($data);
+
+        $authUser->assignRole('Cliente');
+
+        $data = array(
+            'view' => 'mail.welcome',
+            'mail' => $authUser->email,
+            'name' => $authUser->name,
+            'subject' => 'Registro de Empresa'
+        );
+
+        if($request->only('kindPerson') == 2) {
+            $data = array(
+                'view' => 'mail.welcome_company',
+                'mail' => $authUser->email,
+                'name' => $authUser->name,
+                'subject' => 'Registro de Empresa'
+            );
+        }
+
+        Mail::to($data['mail'])->send(new sendMail($data));
+
 
         return redirect()->route('login')
             ->with('flash_message',

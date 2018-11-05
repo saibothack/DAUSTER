@@ -300,6 +300,18 @@
                                         </li>
                                     @endif
 
+                                    @if (!empty(Auth::user()->hasPermissionTo('Servicios')))
+                                        <li class="g-menu-item g-menu-item-type-component g-menu-item-106 active g-standard ">
+                                            <a class="g-menu-item-container" href="{{ route('services.index') }}">
+                                                    <span class="g-menu-item-content">
+                                                        <span class="g-menu-item-title">
+                                                            Servicios
+                                                        </span>
+                                                    </span>
+                                            </a>
+                                        </li>
+                                    @endif
+
                                     @if (!empty(Auth::user()->hasPermissionTo('Usuarios')))
                                         <li class="g-menu-item g-menu-item-type-component g-menu-item-106 active g-standard ">
                                             <a class="g-menu-item-container" href="{{ route('users.index') }}">

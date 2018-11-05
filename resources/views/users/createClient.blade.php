@@ -140,7 +140,7 @@
                                                                 </label>
                                                             </div>
                                                             <div class="controls">
-                                                                <select name="kindPerson" id="kindPerson"
+                                                                <select name="kind_persons_id" id="kind_persons_id"
                                                                         class="required" required="required"
                                                                         style="width: 100%">
                                                                     @foreach ($kindPersons as $kindPerson)

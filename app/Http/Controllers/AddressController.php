@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Country;
-use App\State;
 use Auth;
 use App\User;
+use App\State;
+use App\Country;
 use App\Address;
 use Illuminate\Http\Request;
 

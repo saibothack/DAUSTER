@@ -22,6 +22,7 @@ class ProfilerController extends Controller
         if (Auth::user()->hasRole('Administrador'))
             return view('profilers.profiler');
 
+
         if (Auth::user()->hasRole('Cliente')) {
             $kindPersons = KindPersons::active()->pluck('name', 'id');
             return view('profilers.client', compact('kindPersons', 'user'));
