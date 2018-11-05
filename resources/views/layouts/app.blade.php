@@ -11,13 +11,14 @@
         {{ config('app.name') }} @yield('title')
     </title>
 
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="{{asset('/web/media/gantry5/assets/css/font-awesome.min.css?5b90d7ad')}}"  rel="stylesheet"/>
     <link href="{{asset('/web/media/gantry5/engines/nucleus/css-compiled/nucleus.css?5b90d7ad')}}"  rel="stylesheet"/>
     <link href="{{asset('/web/templates/rt_kraken/custom/css-compiled/kraken_10.css?5b90d80b')}}"  rel="stylesheet"/>
     <link href="{{asset('/web/templates/rt_kraken/custom/css-compiled/kraken-joomla_10.css?5b90d80c')}}"  rel="stylesheet"/>
     <link href="{{asset('/web/templates/rt_kraken/custom/css-compiled/custom_10.css?5b90d80c')}}"  rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.0.7/css/swiper.min.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet"/>
     <link href="{{asset('css/web.css')}}"  rel="stylesheet"/>
     @yield('styles')
 
@@ -277,7 +278,7 @@
                                 @else
                                     @if (!empty(Auth::user()->hasPermissionTo('Mi perfil')))
                                         <li class="g-menu-item g-menu-item-type-component g-menu-item-106 active g-standard ">
-                                            <a class="g-menu-item-container" href="{{ route('services.create') }}">
+                                            <a class="g-menu-item-container" href="{{ route('profilers.index') }}">
                                                         <span class="g-menu-item-content">
                                                             <span class="g-menu-item-title">
                                                                 Mi perfil
@@ -380,14 +381,14 @@
                                         </li>
                                     @endif
 
-                                    @if (!empty(Auth::user()->hasPermissionTo('Tarjetas')))
+                                    @if (!empty(Auth::user()->hasPermissionTo('Estados')))
                                         <li class="g-menu-item g-menu-item-type-component g-menu-item-106 active g-standard ">
-                                            <a class="g-menu-item-container" href="{{ route('charges.index') }}">
-                                        <span class="g-menu-item-content">
-                                            <span class="g-menu-item-title">
-                                                Tarjetas
-                                            </span>
-                                        </span>
+                                            <a class="g-menu-item-container" href="{{ route('states.index') }}">
+                                                <span class="g-menu-item-content">
+                                                    <span class="g-menu-item-title">
+                                                        Estados
+                                                    </span>
+                                                </span>
                                             </a>
                                         </li>
                                     @endif

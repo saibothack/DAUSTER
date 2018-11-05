@@ -36,6 +36,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
             $table->boolean('authorized')->default(0);
             $table->boolean('status')->default(1);
+            $table->boolean('full')->default(1);
             $table->unsignedInteger('kind_persons_id')->nullable();
             $table->foreign('kind_persons_id')
                 ->references('id')
@@ -51,6 +52,9 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('addresses');
+        Schema::dropIfExists('states');
+        Schema::dropIfExists('countries');
         Schema::dropIfExists('users');
         Schema::dropIfExists('kind_persons');
     }

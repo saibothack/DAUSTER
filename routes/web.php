@@ -44,4 +44,15 @@ Route::get('auth/{provider}', 'Auth\SocialAuthController@redirectToProvider')->n
 Route::get('auth/{provider}/callback', 'Auth\SocialAuthController@handleProviderCallback');
 
 
+Route::resource('profilers', 'ProfilerController');
+Route::resource('profilers-image', 'ProfilerImageController');
+
+Route::resource('address', 'AddressController');
+Route::resource('billings', 'BillingController');
+Route::resource('cards', 'CardsController');
+Route::resource('states', 'StateController');
+
+
+
+
 

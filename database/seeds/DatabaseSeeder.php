@@ -69,7 +69,7 @@ class DatabaseSeeder extends Seeder
                         }
 
                         if ($role->name == 'Cliente') {
-                            $permissions = 'Servicios,Alta servicio,Mi perfil,Tarjetas';
+                            $permissions = 'Servicios,Alta servicio,Mi perfil';
                             $permissionsArray = explode(',', $permissions);
 
                             foreach ($permissionsArray as $permission) {
@@ -79,7 +79,7 @@ class DatabaseSeeder extends Seeder
                             }
                         }
                         if ($role->name == 'Conductor') {
-                            $permissions = 'Servicios,Mi perfil,Tarjetas';
+                            $permissions = 'Servicios,Mi perfil';
                             $permissionsArray = explode(',', $permissions);
 
                             foreach ($permissionsArray as $permission) {
@@ -272,7 +272,14 @@ class DatabaseSeeder extends Seeder
             'status' => 1,
         );
 
-        Country::create($data);
+        $country = Country::create($data);
+
+        $dataState = array(
+            'name' => 'CDMX',
+            'countries_id' => $country->id
+        );
+
+        \App\State::create($dataState);
     }
 
     /**

@@ -59,9 +59,10 @@ class SocialAuthController extends Controller
             'avatar' => $user->avatar,
             'provider' => $provider,
             'provider_id' => $user->id,
-            'autorized' => 1,
+            'authorized' => 1,
             'email_verified_at' => now(),
             'status' => 1,
+            'kind_persons_id' => 1,
         ]);
 
         $authUser->assignRole('Cliente');

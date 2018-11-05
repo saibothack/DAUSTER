@@ -388,3 +388,47 @@ select:hover {
         left: 0px !important;
     }
 }
+
+.vertical-menu {
+    width: 100%;
+}
+
+.vertical-menu a {
+    background-color: #eee;
+    color: black;
+    display: block;
+    padding: 12px;
+    text-decoration: none;
+}
+
+.vertical-menu a:hover {
+    background-color: #ccc;
+}
+
+.vertical-menu a.active {
+    background-color: #151a23;
+    color: white;
+}
+
+.card-img-top {
+    width: 238px;
+    height: 178px;
+}
+
+.card-image-div {
+    width: 168px;
+    height: 168px;
+    display: block;
+    position: absolute;
+    top: 5px;
+    left: 35px;
+}
+
+.card-image-profiler {
+    width: 168px;
+    height: 168px;
+    border-style: solid;
+    border-width: 5px;
+    border-color: #ffffff;
+    border-radius: 100%;
+}

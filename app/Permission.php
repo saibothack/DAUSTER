@@ -28,7 +28,7 @@ class Permission extends \Spatie\Permission\Models\Permission
             'Alta servicio',
             'Mi perfil',
             'Facturas',
-            'Tarjetas',
+            'Estados',
         ];
     }
 }
