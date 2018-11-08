@@ -64,56 +64,43 @@
                                             </div>
 
                                             <br>
-                                            <div style="width: 100%; display: inline-flex; margin-bottom: 10px;">
-                                                <div style="width: 50% !important;">
+
+                                            {!! Form::open(['route' => 'users.index', 'method' => 'get', 'class' => 'row']) !!}
+                                                <div class="col-md-2">
                                                     <!-- agregar -->
                                                     <a href="{{ URL::to('users/create') }}" class="button">
                                                         Agregar
                                                     </a>
                                                 </div>
-
-                                                {!! Form::open(['route' => 'users.index', 'method' => 'get', 'style' => 'width: 50% !important;']) !!}
-                                                <div style="width: 100% !important; display: inline-flex;">
-                                                    <div style="width: 70% !important;">
-                                                        <input type="text" placeholder="Ingrese su busqueda" id="search" name="search" style="vertical-align: middle !important;">
-                                                    </div>
-                                                    <div style="width: 30% !important;">
-                                                        <input type="submit" value="Buscar" class="button" style="margin-left: 20px !important;">
-                                                    </div>
+                                                <div class="offset-md-1 col-md-4">
+                                                    <input type="text" placeholder="Ingrese su busqueda" id="search" name="search" style="vertical-align: middle !important;">
                                                 </div>
-                                                {!! Form::close() !!}
-                                            </div>
+                                                <div class="col-md-3">
+                                                    {{Form::select('roles_id', $roles, 0)}}
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <input type="submit" value="Buscar" class="button" style="margin-left: 20px !important;">
+                                                </div>
+                                            {!! Form::close() !!}
 
                                             <br>
                                                 <table>
                                                     <thead>
                                                         <tr>
-                                                            <th>
-                                                                Usuario
-                                                            </th>
-                                                            <th>
-                                                                Email
-                                                            </th>
-                                                            <th>
-                                                                Tipo Cuenta
-                                                            </th>
-                                                            <th>
-                                                                Opciones
-                                                            </th>
+                                                            <th>Rol</th>
+                                                            <th>Usuario</th>
+                                                            <th>Email</th>
+                                                            <th>Tipo Cuenta</th>
+                                                            <th>Opciones</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         @foreach ($users as $user)
                                                         <tr>
-                                                            <td>
-                                                                {{ $user->name }} {{ $user->surnames }}
-                                                            </td>
-                                                            <td>
-                                                                {{ $user->email }}
-                                                            </td>
-                                                            <td>
-                                                                {{ $user->provider }}
-                                                            </td>
+                                                            <td>{{ echo($user->getRoleNames()[0]) }}</td>
+                                                            <td>{{ $user->name }} {{ $user->surnames }}</td>
+                                                            <td>{{ $user->email }}</td>
+                                                            <td>{{ $user->provider }}</td>
                                                             <td class="tdOptions">
                                                                 <div style="display: inline-flex;">
                                                                     <a href="{{ URL::to('users/'.$user->id.'/edit') }}" class="button button-grey button-2">

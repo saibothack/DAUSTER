@@ -29,6 +29,8 @@ class CreateUsersTable extends Migration
             $table->string('phone')->nullable();
             $table->string('password')->nullable();
             $table->string('avatar')->nullable();
+            $table->string('img_user')->nullable();
+            $table->string('img_vehicle')->nullable();
             $table->string('provider')->nullable();
             $table->string('provider_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
@@ -37,6 +39,9 @@ class CreateUsersTable extends Migration
             $table->boolean('authorized')->default(0);
             $table->boolean('status')->default(1);
             $table->boolean('full')->default(1);
+            $table->integer('current_work_id')->nullable();
+            $table->integer('data_plan')->nullable();
+            $table->integer('vehicles_id')->nullable();
             $table->unsignedInteger('kind_persons_id')->nullable();
             $table->foreign('kind_persons_id')
                 ->references('id')

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Vehicle;
 use Auth;
 use Mail;
 use Input;
@@ -20,8 +21,17 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::active()->search($request->get('search'))->paginate(10);
-        return view('users.index')->with('users', $users);
+        $roles = Role::all()->pluck('name', 'id');
+        $roles[0] = "Seleccione";
+
+        if(($request->get('roles_id') != "") && ($request->get('roles_id') != "0")) {
+            $descroles = Role::where('id', '=', $request->get('roles_id'))->first()->name;
+            $users = User::active()->search($request->get('search'))->role($descroles)->paginate(10);
+        } else {
+            $users = User::active()->search($request->get('search'))->paginate(10);
+        }
+
+        return view('users.index', compact('users', 'roles'));
     }
 
     /**
@@ -218,7 +228,11 @@ class UserController extends Controller
 
     public function registerDriver()
     {
-        return view('users.createDriver');
+        $data_plan = array('Si', 'No');
+        $vehicles = Vehicle::all()->pluck('name', 'id');
+        $current_work = array('Estudiante', 'Trabajo de medio tiempo', 'Trabajo tiempo completo', 'Sin empleo');
+
+        return view('users.createDriver', compact('vehicles', 'current_work', 'data_plan'));
     }
 
     public function registerDriverCreate(Request $request)
@@ -234,12 +248,25 @@ class UserController extends Controller
             'email' => 'required|email|unique:users',
             'phone' => 'required|string|max:255',
             'password'=>'required|min:6|confirmed',
+            'vehicles_id'=>'required|int',
+            'current_work_id'=>'required|int',
+            'data_plan'=>'required|int'
         ]);
 
         $data = $request->only('name', 'surnames', 'birthday', 'email', 'phone', 'password');
         $data["authorized"] = 0;
 
-        User::create($data);
+        $authUser = User::create($data);
+        $authUser->assignRole('Conductor');
+
+        $data = array(
+            'view' => 'mail.welcome_drive',
+            'mail' => $authUser->email,
+            'name' => $authUser->name,
+            'subject' => 'Registro de Conductor'
+        );
+
+        Mail::to($data['mail'])->send(new sendMail($data));
 
         return redirect()->route('login')
             ->with('flash_message',

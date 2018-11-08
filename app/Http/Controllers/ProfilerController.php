@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\User;
+use App\Vehicle;
 use App\Profiler;
 use App\KindPersons;
 use Illuminate\Http\Request;
@@ -28,8 +29,12 @@ class ProfilerController extends Controller
             return view('profilers.client', compact('kindPersons', 'user'));
         }
 
-        if (Auth::user()->hasRole('Conductor'))
-            return view('profilers.driver' );
+        if (Auth::user()->hasRole('Conductor')) {
+            $data_plan = array('Si', 'No');
+            $vehicles = Vehicle::all()->pluck('name', 'id');
+            $current_work = array('Estudiante', 'Trabajo de medio tiempo', 'Trabajo tiempo completo', 'Sin empleo');
+            return view('profilers.driver', compact('user', 'data_plan', 'vehicles', 'current_work'));
+        }
 
     }
 

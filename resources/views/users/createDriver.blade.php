@@ -78,115 +78,104 @@
 
                                                         <br>
 
-                                                        {{ Form::open(array('url' => 'register-driver', 'class' => 'form-validate form-horizontal well', 'method' => 'POST')) }}
+                                                        {{ Form::open(array('url' => 'register-driver', 'class' => 'row', 'method' => 'POST')) }}
 
-                                                            <fieldset>
-                                                                <legend>Agregar</legend>
-                                                                <div class="control-group field-spacer">
-                                                                    <div class="control-label" style="width: 100% !important; text-align: left;">
-                                                                        <span class="spacer">
-                                                                            <span class="before">
-                                                                            </span>
-                                                                            <span class="text">
-                                                                                <label id="jform_spacer-lbl" class="">
-                                                                                    <strong class="red">*</strong> Campos requeridos
-                                                                                </label>
-                                                                            </span>
-                                                                            <span class="after"></span>
-                                                                        </span>
-                                                                    </div>
-                                                                    <div class="controls"></div>
-                                                                </div>
-                                                                <div class="control-group">
-                                                                    <div class="control-label">
-                                                                        &nbsp;&nbsp;
-                                                                    </div>
-                                                                    <div class="controls">
-                                                                        &nbsp;&nbsp;&nbsp;
+                                                            <h1>Registro de Conductor</h1>
+                                                            <div class="offset-md-1 col-md-10">
+                                                                <p>Antes de iniciar el proceso de registro debes de estar seguro de cumplir con los siguientes requisitos.</p>
+                                                                <ul>
+                                                                    <li>Ser autóno y estar dado de alta en hacienda</li>
+                                                                    <li>No tener antecedentes penales</li>
+                                                                    <li>Contar con una bicicleta urbana o una motocicleta de más de 150CC</li>
+                                                                    <li>Contar con un plan de datos celular</li>
+                                                                </ul>
+                                                            </div>
+
+                                                            <div class="col-md-12">
+                                                                <p><strong class="red">*</strong> Campos requeridos</p>
+                                                            </div>
+
+                                                            <div class="col-md-12">
+                                                                <div class="form-group row">
+                                                                    {{Form::label('name', 'Nombres *', array('class' => 'col-sm-4 col-form-label text-right'))}}
+                                                                    <div class="col-sm-8">
+                                                                        {{ Form::text('name', null, array('class' => 'form-control', 'required' => 'required')) }}
                                                                     </div>
                                                                 </div>
-                                                                <div class="control-group">
-                                                                    <div class="control-label">
-                                                                        <label for="name" class="hasPopover required">
-                                                                            Nombres
-                                                                            <span class="star">&nbsp;*</span>
-                                                                        </label>
-                                                                    </div>
-                                                                    <div class="controls">
-                                                                        <input name="name" id="name" class="required" required="required" type="text" value="{{ old('name') }}">
+
+                                                                <div class="form-group row">
+                                                                    {{Form::label('surnames', 'Apellidos *', array('class' => 'col-sm-4 col-form-label text-right'))}}
+                                                                    <div class="col-sm-8">
+                                                                        {{ Form::text('surnames', null, array('class' => 'form-control', 'required' => 'required')) }}
                                                                     </div>
                                                                 </div>
-                                                                <div class="control-group">
-                                                                    <div class="control-label">
-                                                                        <label for="surnames" class="hasPopover required">
-                                                                            Apellidos
-                                                                            <span class="star">&nbsp;*</span>
-                                                                        </label>
-                                                                    </div>
-                                                                    <div class="controls">
-                                                                        <input name="surnames" id="surnames" class="required" required="required" type="text" value="{{ old('surnames') }}">
+
+                                                                <div class="form-group row">
+                                                                    {{Form::label('birthday', 'Nacimiento *', array('class' => 'col-sm-4 col-form-label text-right'))}}
+                                                                    <div class="col-sm-8">
+                                                                        {{ Form::date('birthday', null, array('class' => 'form-control', 'required' => 'required')) }}
                                                                     </div>
                                                                 </div>
-                                                                <div class="control-group">
-                                                                    <div class="control-label">
-                                                                        <label for="birthday" class="hasPopover required">
-                                                                            Nacimiento
-                                                                            <span class="star">&nbsp;*</span>
-                                                                        </label>
-                                                                    </div>
-                                                                    <div class="controls">
-                                                                        <input name="birthday" id="birthday" class="required" required="required" type="date" value="{{ old('birthday') }}">
+
+                                                                <div class="form-group row">
+                                                                    {{Form::label('email', 'Email *', array('class' => 'col-sm-4 col-form-label text-right'))}}
+                                                                    <div class="col-sm-8">
+                                                                        {{ Form::email('email', null, array('class' => 'form-control', 'required' => 'required')) }}
                                                                     </div>
                                                                 </div>
-                                                                <div class="control-group">
-                                                                    <div class="control-label">
-                                                                        <label for="email" class="hasPopover required">
-                                                                            Email
-                                                                            <span class="star">&nbsp;*</span>
-                                                                        </label>
-                                                                    </div>
-                                                                    <div class="controls">
-                                                                        <input name="email" id="email" class="required" required="required" type="email" value="{{ old('email') }}">
+
+                                                                <div class="form-group row">
+                                                                    {{Form::label('phone', 'Teléfono *', array('class' => 'col-sm-4 col-form-label text-right'))}}
+                                                                    <div class="col-sm-8">
+                                                                        {{ Form::tel('phone', null, array('class' => 'form-control', 'required' => 'required')) }}
                                                                     </div>
                                                                 </div>
-                                                                <div class="control-group">
-                                                                    <div class="control-label">
-                                                                        <label for="phone" class="hasPopover required">
-                                                                            Teléfono
-                                                                            <span class="star">&nbsp;*</span>
-                                                                        </label>
-                                                                    </div>
-                                                                    <div class="controls">
-                                                                        <input name="phone" id="phone" class="required" required="required" type="tel" value="{{ old('phone') }}">
+
+                                                                <div class="form-group row">
+                                                                    {{Form::label('password', 'Contraseña *', array('class' => 'col-sm-4 col-form-label text-right'))}}
+                                                                    <div class="col-sm-8">
+                                                                        {{ Form::password('password', null, array('class' => 'form-control', 'required' => 'required')) }}
                                                                     </div>
                                                                 </div>
-                                                                <div class="control-group">
-                                                                    <div class="control-label">
-                                                                        <label for="phone" class="hasPopover required">
-                                                                            Contraseña
-                                                                            <span class="star">&nbsp;*</span>
-                                                                        </label>
-                                                                    </div>
-                                                                    <div class="controls">
-                                                                        <input name="password" id="password" class="required" required="required" type="password">
+
+                                                                <div class="form-group row">
+                                                                    {{Form::label('password_confirmation', 'Confirma *', array('class' => 'col-sm-4 col-form-label text-right'))}}
+                                                                    <div class="col-sm-8">
+                                                                        {{ Form::password('password_confirmation', null, array('class' => 'form-control', 'required' => 'required')) }}
                                                                     </div>
                                                                 </div>
-                                                                <div class="control-group">
-                                                                    <div class="control-label">
-                                                                        <label for="phone" class="hasPopover required">
-                                                                            Confirmar
-                                                                            <span class="star">&nbsp;*</span>
-                                                                        </label>
-                                                                    </div>
-                                                                    <div class="controls">
-                                                                        <input name="password_confirmation" id="password_confirmation" class="required" required="required" type="password">
+
+                                                                <div class="form-group row">
+                                                                    {{Form::label('vehicles_id', 'Tipo de vehiculo *', array('class' => 'col-sm-4 col-form-label text-right'))}}
+                                                                    <div class="col-sm-8">
+                                                                        {{Form::select('vehicles_id', $vehicles)}}
                                                                     </div>
                                                                 </div>
-                                                            </fieldset>
-                                                            <div class="control-group">
-                                                                <div class="controls">
-                                                                    <button class="button" type="submit">Registrar
-                                                                    </button>
+
+                                                                <div class="form-group row">
+                                                                    {{Form::label('current_work_id', '¿Trabajo actual? *', array('class' => 'col-sm-4 col-form-label text-right'))}}
+                                                                    <div class="col-sm-8">
+                                                                        {{Form::select('current_work_id', $current_work)}}
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group row">
+                                                                    {{Form::label('data_plan', '¿Cuentas con plan de datos o estás dispuesto a solicitarlo? *', array('class' => 'col-sm-4 col-form-label text-right'))}}
+                                                                    <div class="col-sm-8">
+                                                                        {{Form::select('data_plan', $data_plan)}}
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="offset-md-1 col-md-10">
+                                                                    <p>Para continuar con el reistro en a la mano los siguientes documentos.</p>
+                                                                    <ul>
+                                                                        <li>Debes de contar con una fotografia donde te distingas perfectamente</li>
+                                                                        <li>Tener una imagen de tu vehículo</li>
+                                                                    </ul>
+                                                                </div>
+
+                                                                <div class="offset-md-2 col-md-2">
+                                                                    <button class="button btn-primary validate" type="submit">Modificar</button>
                                                                 </div>
                                                             </div>
                                                         {{ Form::close() }}

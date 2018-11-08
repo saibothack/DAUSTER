@@ -22,13 +22,11 @@ class sendMail extends Mailable
     {
 
         return $this->view($this->data['view'])
-            ->from($this->data['mail'], $this->data['name'])
             ->cc($this->data['mail'], $this->data['name'])
             ->bcc($this->data['mail'], $this->data['name'])
             ->replyTo($this->data['mail'], $this->data['name'])
             ->subject($this->data['subject'])
             ->with([ 'data' => $this->data ]);
-
 
     }
 }

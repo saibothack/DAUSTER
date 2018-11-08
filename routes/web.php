@@ -52,6 +52,10 @@ Route::resource('billings', 'BillingController');
 Route::resource('cards', 'CardsController');
 Route::resource('states', 'StateController');
 
+Route::post('user-image','ProfilerImageController@imageUser')->name('user-image');
+Route::post('vehicle-image','ProfilerImageController@imageVehicle')->name('vehicle-image');
+
+
 
 
 
