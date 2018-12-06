@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class KindPersonsController extends Controller
 {
     public function __construct() {
-    //$this->middleware(['auth', 'isActive']);
+        $this->middleware(['auth']);
     }
 
     /**

@@ -30,7 +30,7 @@
 
                     <div class="divImgMarker">
                         <div class="divimg">
-                            <img src="../images/alfiler-de-mapa.png" id="imgMarkerDefault">
+                            <img src="{{asset('images/alfiler-de-mapa.png')}}" id="imgMarkerDefault">
                         </div>
                     </div>
 

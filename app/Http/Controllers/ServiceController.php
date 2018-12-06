@@ -12,6 +12,10 @@ use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
+    public function __construct() {
+        $this->middleware(['auth', 'usercomplete']);
+    }
+
     /**
      * Display a listing of the resource.
      *

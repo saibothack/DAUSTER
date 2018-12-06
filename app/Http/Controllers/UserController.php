@@ -14,6 +14,10 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    public function __construct() {
+        $this->middleware(['auth'])->except('registerClient', 'registerClientCreate', 'registerDriver', 'registerDriverCreate'); //isAdmin middleware lets only users with a //specific permission permission to access these resources
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -23,6 +27,11 @@ class UserController extends Controller
     {
         $roles = Role::all()->pluck('name', 'id');
         $roles[0] = "Seleccione";
+        $status = array(
+            0 => 'No autorizado',
+            1 => 'Autorizado'
+        );
+
 
         if(($request->get('roles_id') != "") && ($request->get('roles_id') != "0")) {
             $descroles = Role::where('id', '=', $request->get('roles_id'))->first()->name;
@@ -31,7 +40,7 @@ class UserController extends Controller
             $users = User::active()->search($request->get('search'))->paginate(10);
         }
 
-        return view('users.index', compact('users', 'roles'));
+        return view('users.index', compact('users', 'roles', 'status'));
     }
 
     /**

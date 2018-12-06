@@ -73,7 +73,7 @@
                                                     <div class="row">
                                                         <div class="col-10">
                                                             <div class="row">
-                                                                <div class="col-md-8 col-md-offset-2">
+                                                                <div class="col-md-10 col-md-offset-2">
                                                                     @include ('errors.list') {{-- Including error file --}}
                                                                 </div>
                                                             </div>
@@ -114,7 +114,7 @@
                                                             </div>
 
                                                             <div class="form-group row">
-                                                                {{Form::label('interior', 'No. Interior *', array('class' => 'col-sm-4 col-form-label text-right'))}}
+                                                                {{Form::label('interior', 'No. Interior', array('class' => 'col-sm-4 col-form-label text-right'))}}
                                                                 <div class="col-sm-8">
                                                                     {{ Form::text('interior', null, array('class' => 'form-control')) }}
                                                                 </div>

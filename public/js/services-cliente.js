@@ -51,7 +51,7 @@ function addMarkerOnClick() {
     var marker = new google.maps.Marker({
         position: cntLatLng,
         map: map,
-        icon: "http://localhost/dev/dauster/public/images/mapa-marcador.png"
+        icon: "http://localhost/dauster/public/images/mapa-marcador.png"
     });
 
     markers.push(marker);

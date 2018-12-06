@@ -90,17 +90,17 @@
                                                             <th>Rol</th>
                                                             <th>Usuario</th>
                                                             <th>Email</th>
-                                                            <th>Tipo Cuenta</th>
+                                                            <th>Estatus</th>
                                                             <th>Opciones</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         @foreach ($users as $user)
                                                         <tr>
-                                                            <td>{{ echo($user->getRoleNames()[0]) }}</td>
+                                                            <td>{{ $user->getRoleNames()[0] }}</td>
                                                             <td>{{ $user->name }} {{ $user->surnames }}</td>
                                                             <td>{{ $user->email }}</td>
-                                                            <td>{{ $user->provider }}</td>
+                                                            <td>{{ $status[$user->authorized] }}</td>
                                                             <td class="tdOptions">
                                                                 <div style="display: inline-flex;">
                                                                     <a href="{{ URL::to('users/'.$user->id.'/edit') }}" class="button button-grey button-2">
