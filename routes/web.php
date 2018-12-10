@@ -22,10 +22,20 @@ Route::resource('kind-persons', 'KindPersonsController');
 Route::resource('users', 'UserController');
 Route::resource('roles', 'RoleController');
 Route::resource('permissions', 'PermissionController');
-Route::resource('services', 'ServiceController');
 Route::resource('vehicles', 'VehicleController');
 Route::resource('countries', 'CountryController');
 Route::resource('charges', 'ChargeController');
+
+//Ruta de servicios
+Route::resource('services', 'ServiceController');
+Route::get('services/{id}/coordinates', 'ServiceController@coordinates');
+Route::post('services/{id}/coordinates', 'ServiceController@coordinates');
+Route::post('services/{id}/charges', 'ServiceController@charges');
+Route::get('services/{id}/charges', 'ServiceController@charges');
+Route::get('services/{id}/deliveries', 'ServiceController@deliveries');
+Route::get('services/{id}/payments', 'ServiceController@payments');
+Route::get('services/{id}/tracking', 'ServiceController@tracking');
+
 
 Route::get('/change-password','UserController@changePassword');
 Route::post('/change-password','UserController@updatePassword')->name('change-password');

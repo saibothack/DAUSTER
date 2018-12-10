@@ -60,5 +60,5 @@
 
 @section('scripts')
     <script src="{{ asset('js/services-cliente.js') }}"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDNSjUu5ZcMxNVYAICYDbdYUQDfKos0KZE&callback=initMap&region=MX&libraries=places" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_KEY')}}&callback=initMap&region=MX&libraries=places" async defer></script>
 @endsection
