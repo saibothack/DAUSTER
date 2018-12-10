@@ -29,6 +29,8 @@ Route::resource('charges', 'ChargeController');
 //Ruta de servicios
 Route::resource('services', 'ServiceController');
 Route::get('services/{id}/coordinates', 'ServiceController@coordinates');
+Route::post('services/{id}/coordinates', 'ServiceController@coordinates');
+Route::post('services/{id}/charges', 'ServiceController@charges');
 Route::get('services/{id}/charges', 'ServiceController@charges');
 Route::get('services/{id}/deliveries', 'ServiceController@deliveries');
 Route::get('services/{id}/payments', 'ServiceController@payments');

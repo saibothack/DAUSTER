@@ -1,4 +1,4 @@
-{{-- \resources\views\kind_persons\create.blade.php --}}
+{{-- \resources\views\services\create-charges.blade.php --}}
 @extends('layouts.app')
 
 @section('title', '| Servicios  ')
@@ -94,8 +94,8 @@
                                                                 <div class="g-gridstatistic">
                                                                     <div class="g-gridstatistic-wrapper g-gridstatistic-1cols">
                                                                         <div class="g-gridstatistic-item" id="chargePrice">
-                                                                            <input type="hidden" id="chargeTotal" value="{{$data["totalCost"]}}">
-                                                                            <div class="g-gridstatistic-item-text1 odometer odometer-auto-theme" data-odometer-value="{{$data["totalCost"]}}" id="chargePriceDinamic">
+                                                                            <input type="hidden" id="chargeTotal" value="{{$total}}">
+                                                                            <div class="g-gridstatistic-item-text1 odometer odometer-auto-theme" data-odometer-value="{{$total}}" id="chargePriceDinamic">
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -103,27 +103,34 @@
                                                             </span>
                                                             <div style="width: 100% !important; display: inline-flex !important; margin-bottom: 10px;">
                                                                 <div style="width: 49.5% !important;">
-                                                                    <span class="g-gridcontent-item-text1">{{$data["time"]}} min </span>
+                                                                    <span class="g-gridcontent-item-text1">{{sprintf('%02d:%02d', (int) $time, fmod($time, 1) * 60)}} min </span>
                                                                 </div>
                                                                 <div style="width: 49.5% !important;">
-                                                                    <span class="g-gridcontent-item-text1">{{$data["distance"]}} km </span>
+                                                                    <span class="g-gridcontent-item-text1">{{number_format($distance, 2, '.', '')}} km </span>
                                                                 </div>
                                                             </div>
 
 
+                                                            {{ Form::open(array('method' => 'post')) }}
                                                             <div style="width: 100% !important; display: inline-flex !important;">
                                                                 <div style="width: 25% !important; margin-right: 5px !important;">
                                                                     {{Form::label('vehicle', 'Vehiculo *', array('class' => 'hasPopover required'))}}
                                                                 </div>
                                                                 <div style="width: 74% !important;">
-                                                                    <select name="vehicle" id="vehicle">
-                                                                        @foreach($vehicles as $vehicle)
-                                                                            <option value="{{$vehicle->id}}" data-type="{{$vehicle->travelMode}}">{{$vehicle->name}}</option>
-                                                                        @endforeach
-                                                                    </select>
+                                                                    {{ Form::select('vehicle', $vehicles, $idVehicle, array("onchange" => "this.form.submit()")) }}
                                                                 </div>
                                                             </div>
-                                                            <a href="#" class="button button-4">More</a>
+                                                            {{ Form::close() }}
+                                                            <br>
+
+                                                            <div style="width: 100% !important; display: inline-flex !important; margin-bottom: 10px;">
+                                                                <div style="width: 49.5% !important;">
+                                                                    <a href="{{ url('services/create/coordinates') }}" class="button button-4 btn-danger">Cancelar</a>
+                                                                </div>
+                                                                <div style="width: 49.5% !important;">
+                                                                    <a href="{{ url('services/create/deliveries') }}" class="btn-success button button-4">Continar</a>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -164,7 +171,19 @@
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody>
+                                                                @foreach($chargeOthers as $key => $value)
+                                                                    <tr>
+                                                                        <td>{{ $value['chargeOthersName'] }}</td>
+                                                                        <td>{{ $value['chargeOthersPrice'] }}</td>
+                                                                        <td>
+                                                                            {{ Form::open(array('method' => 'post')) }}
+                                                                            {{ Form::hidden('idChargeOthers', $key) }}
+                                                                            <button type="submit">Eliminar</button>
 
+                                                                            {{ Form::close() }}
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -178,222 +197,45 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="g-grid">
-
-                            <div class="g-block size-50">
-                                <div class="g-content">
-                                    <div class="platform-content row-fluid">
-                                        <div class="span12">
-                                            <div class="contact">
-                                                <div class="contact-form back">
-
-                                                    <div class="form-validate form-horizontal well">
-
-                                                        <fieldset>
-                                                            <legend>Remitente </legend>
-                                                            <div class="control-group field-spacer">
-                                                                <div class="control-label" style="width: 100% !important; text-align: left;">
-                                                                        <span class="spacer">
-                                                                            <span class="before">
-                                                                            </span>
-                                                                            <span class="text">
-                                                                                <label id="jform_spacer-lbl" class="">
-                                                                                    <strong class="red">*</strong> Campos requeridos
-                                                                                </label>
-                                                                            </span>
-                                                                            <span class="after"></span>
-                                                                        </span>
-                                                                </div>
-                                                                <div class="controls"></div>
-                                                            </div>
-                                                            <div class="control-group">
-                                                                <div class="control-label">
-                                                                    &nbsp;&nbsp;
-                                                                </div>
-                                                                <div class="controls">
-                                                                    &nbsp;&nbsp;&nbsp;
-                                                                </div>
-                                                            </div>
-                                                            <div class="control-group">
-                                                                <div class="control-label">
-                                                                    {{Form::label('companyName', 'Empresa', array('class' => 'hasPopover required'))}}
-                                                                </div>
-                                                                <div class="controls">
-                                                                    {{Form::text('companyName', null,  array('required' => 'required', 'class' => 'required'))}}
-                                                                </div>
-                                                            </div>
-                                                            <div class="control-group">
-                                                                <div class="control-label">
-                                                                    {{Form::label('name', 'Nombre *', array('class' => 'hasPopover required'))}}
-                                                                </div>
-                                                                <div class="controls">
-                                                                    {{Form::text('name', $user->name,  array('required' => 'required', 'class' => 'required'))}}
-                                                                </div>
-                                                            </div>
-                                                            <div class="control-group">
-                                                                <div class="control-label">
-                                                                    {{Form::label('surnames', 'Apellidos *', array('class' => 'hasPopover required'))}}
-                                                                </div>
-                                                                <div class="controls">
-                                                                    {{Form::text('surnames', $user->surnames,  array('required' => 'required', 'class' => 'required'))}}
-                                                                </div>
-                                                            </div>
-                                                            <div class="control-group">
-                                                                <div class="control-label">
-                                                                    {{Form::label('phone', 'Teléfono *', array('class' => 'hasPopover required'))}}
-                                                                </div>
-                                                                <div class="controls">
-                                                                    {{Form::tel('phone', $user->phone,  array('required' => 'required', 'class' => 'required'))}}
-                                                                </div>
-                                                            </div>
-                                                            <div class="control-group">
-                                                                <div class="control-label">
-                                                                    {{Form::label('packages', 'Paquetes *', array('class' => 'hasPopover required'))}}
-                                                                </div>
-                                                                <div class="controls">
-                                                                    {{Form::number('packages', null,  array('required' => 'required', 'class' => 'required'))}}
-                                                                </div>
-                                                            </div>
-                                                            <div class="control-group">
-                                                                <div class="control-label">
-                                                                    {{Form::label('shippingDescription', 'Descripción Envío *', array('class' => 'hasPopover required'))}}
-                                                                </div>
-                                                                <div class="controls">
-                                                                    {{Form::textarea('shippingDescription', null,  array('required' => 'required', 'class' => 'required', 'rows' => 4, 'cols' => 54))}}
-                                                                </div>
-                                                            </div>
-
-                                                        </fieldset>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="g-block size-50">
-                                <div class="g-content">
-                                    <div class="platform-content row-fluid">
-                                        <div class="span12">
-                                            <div class="contact">
-                                                <div class="contact-form back">
-
-                                                    <div class="form-validate form-horizontal well">
-
-                                                        <fieldset>
-                                                            <legend>Destinatario</legend>
-                                                            <div class="control-group field-spacer">
-                                                                <div class="control-label" style="width: 100% !important; text-align: left;">
-                                                                        <span class="spacer">
-                                                                            <span class="before">
-                                                                            </span>
-                                                                            <span class="text">
-                                                                                <label id="jform_spacer-lbl" class="">
-                                                                                    <strong class="red">*</strong> Campos requeridos
-                                                                                </label>
-                                                                            </span>
-                                                                            <span class="after"></span>
-                                                                        </span>
-                                                                </div>
-                                                                <div class="controls"></div>
-                                                            </div>
-                                                            <div class="control-group">
-                                                                <div class="control-label">
-                                                                    &nbsp;&nbsp;
-                                                                </div>
-                                                                <div class="controls">
-                                                                    &nbsp;&nbsp;&nbsp;
-                                                                </div>
-                                                            </div>
-                                                            <div class="control-group">
-                                                                <div class="control-label">
-                                                                    {{Form::label('companyName', 'Empresa', array('class' => 'hasPopover required'))}}
-                                                                </div>
-                                                                <div class="controls">
-                                                                    {{Form::text('companyName', null,  array('required' => 'required', 'class' => 'required'))}}
-                                                                </div>
-                                                            </div>
-                                                            <div class="control-group">
-                                                                <div class="control-label">
-                                                                    {{Form::label('name', 'Nombre *', array('class' => 'hasPopover required'))}}
-                                                                </div>
-                                                                <div class="controls">
-                                                                    {{Form::text('name', null,  array('required' => 'required', 'class' => 'required'))}}
-                                                                </div>
-                                                            </div>
-                                                            <div class="control-group">
-                                                                <div class="control-label">
-                                                                    {{Form::label('surnames', 'Apellidos *', array('class' => 'hasPopover required'))}}
-                                                                </div>
-                                                                <div class="controls">
-                                                                    {{Form::text('surnames', null,  array('required' => 'required', 'class' => 'required'))}}
-                                                                </div>
-                                                            </div>
-                                                            <div class="control-group">
-                                                                <div class="control-label">
-                                                                    {{Form::label('phone', 'Teléfono *', array('class' => 'hasPopover required'))}}
-                                                                </div>
-                                                                <div class="controls">
-                                                                    {{Form::tel('phone', null,  array('required' => 'required', 'class' => 'required'))}}
-                                                                </div>
-                                                            </div>
-                                                            <div class="control-group">
-                                                                <div class="control-label">
-                                                                    {{Form::label('email', 'Email *', array('class' => 'hasPopover required'))}}
-                                                                </div>
-                                                                <div class="controls">
-                                                                    {{Form::email('email', null,  array('required' => 'required', 'class' => 'required'))}}
-                                                                </div>
-                                                            </div>
-                                                            <div class="control-group">
-                                                                <div class="control-label">
-                                                                    {{Form::label('arrivalDescription', 'Descripción Arribo *', array('class' => 'hasPopover required'))}}
-                                                                </div>
-                                                                <div class="controls">
-                                                                    {{Form::textarea('arrivalDescription', null,  array('required' => 'required', 'class' => 'required', 'rows' => 4, 'cols' => 54))}}
-                                                                </div>
-                                                            </div>
-
-                                                        </fieldset>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </section>
                 </div>
             </div>
         </div>
 
         <div id="dialog-form" title="Agregar compra">
-            <form id="frmChargesOthers">
-                <fieldset>
-                    <p class="validateTips">*Campos requeridos</p>
-                    <div style="margin: 15px;">
-                        <div style="display: inline-block; width: 150px !important; text-align: right">
-                            {{Form::label('chargeOthersName', 'Nombre *', array('class' => 'hasPopover required'))}}
-                        </div>
-                        <div style="display: inline-block; width: 300px !important;">
-                            <input type="text" required="required" class="required" id="chargeOthersName">
-                        </div>
+            {{ Form::open(array('id' => 'frmChargesOthers', 'method' => 'post')) }}
+            <fieldset>
+                <p class="validateTips">*Campos requeridos</p>
+                <div style="margin: 15px;">
+                    <div style="display: inline-block; width: 150px !important; text-align: right">
+                        {{Form::label('chargeOthersName', 'Nombre *', array('class' => 'hasPopover required'))}}
                     </div>
-                    <div style="margin: 15px;">
-                        <div style="display: inline-block; width: 150px !important; text-align: right">
-                            {{Form::label('chargeOthersPrice', 'Precio *', array('class' => 'hasPopover required'))}}
-                        </div>
-                        <div style="display: inline-block; width: 300px !important;">
-                            <input type="number" required="required" class="required" id="chargeOthersPrice" min="1">
-                        </div>
+                    <div style="display: inline-block; width: 300px !important;">
+                        {{ Form::text('chargeOthersName', null, array('required' => 'required')) }}
                     </div>
-                    <div style="text-align: right !important;">
-                        <button class="button btn-primary validate" type="submit">Agregar
-                        </button>
+                </div>
+                <div style="margin: 15px;">
+                    <div style="display: inline-block; width: 150px !important; text-align: right">
+                        {{Form::label('chargeOthersPrice', 'Precio *', array('class' => 'hasPopover required'))}}
                     </div>
-                </fieldset>
-            </form>
+                    <div style="display: inline-block; width: 300px !important;">
+                        {{ Form::number('chargeOthersPrice', null, array('required' => 'required')) }}
+                    </div>
+                </div>
+                <div style="margin: 15px;">
+                    <div style="display: inline-block; width: 150px !important; text-align: right">
+                        {{Form::label('chargeOthersDescription', 'Descripción', array('class' => 'hasPopover required'))}}
+                    </div>
+                    <div style="display: inline-block; width: 300px !important;">
+                        {!! Form::textarea('chargeOthersDescription', null, ['rows' => 3]) !!}
+                    </div>
+                </div>
+                <div style="text-align: right !important;">
+                    <button class="button btn-primary validate" type="submit">Agregar
+                    </button>
+                </div>
+            </fieldset>
+            {{ Form::close() }}
         </div>
     </section>
 

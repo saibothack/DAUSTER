@@ -81,99 +81,51 @@
                 <div class="g-block size-100">
                     <section id="g-mainbar">
                         <div class="g-grid">
-                            <div class="g-block size-50">
+                            <div class="g-block size-100">
                                 <div id="gridcontent-3925-particle" class="g-content g-particle">
-                                    <div class="center">
-                                        <div class="g-gridcontent">
-                                            <div class="g-gridcontent-wrapper g-gridcontent-2cols">
-                                                <div class="g-gridcontent-item">
-                                                    <div class="g-gridcontent-item-wrapper g-gridcontent-title-style-1">
-                                                        <div class="g-gridcontent-item-content">
-                                                            <span class="g-gridcontent-item-text1">Costo</span>
-                                                            <span class="g-gridcontent-item-text2" id="totalCost">
-                                                                <div class="g-gridstatistic">
-                                                                    <div class="g-gridstatistic-wrapper g-gridstatistic-1cols">
-                                                                        <div class="g-gridstatistic-item" id="chargePrice">
-                                                                            <input type="hidden" id="chargeTotal" value="{{$data["totalCost"]}}">
-                                                                            <div class="g-gridstatistic-item-text1 odometer odometer-auto-theme" data-odometer-value="{{$data["totalCost"]}}" id="chargePriceDinamic">
+                                    <div class="g-gridcontent">
+                                        <div class="g-gridcontent-wrapper g-gridcontent-2cols">
+                                            <div class="g-gridcontent-item">
+                                                <div class="g-gridcontent-item-wrapper g-gridcontent-title-style-1">
+                                                    <div class="g-gridcontent-item-content">
+                                                        <div class="row">
+                                                            <div class="col-1">
+                                                                <span class="g-gridcontent-item-text1">Costo</span>
+                                                            </div>
+                                                            <div class="col-3">
+                                                                <span class="g-gridcontent-item-text2" id="totalCost">
+                                                                    <div class="g-gridstatistic">
+                                                                        <div class="g-gridstatistic-wrapper g-gridstatistic-1cols">
+                                                                            <div class="g-gridstatistic-item" id="chargePrice">
+                                                                                <input type="hidden" id="chargeTotal" value="{{ \Illuminate\Support\Facades\Session::get('totalCost') }}">
+                                                                                <div class="g-gridstatistic-item-text1 odometer odometer-auto-theme" data-odometer-value="{{ \Illuminate\Support\Facades\Session::get('totalCost') }}" id="chargePriceDinamic">
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                            </span>
-                                                            <div style="width: 100% !important; display: inline-flex !important; margin-bottom: 10px;">
-                                                                <div style="width: 49.5% !important;">
-                                                                    <span class="g-gridcontent-item-text1">{{$data["time"]}} min </span>
-                                                                </div>
-                                                                <div style="width: 49.5% !important;">
-                                                                    <span class="g-gridcontent-item-text1">{{$data["distance"]}} km </span>
-                                                                </div>
+                                                                </span>
+                                                            </div>
+                                                            <div class="col-1">
+                                                                <span class="g-gridcontent-item-text1">{{ \Illuminate\Support\Facades\Session::get('time') }} min </span>
+                                                            </div>
+                                                            <div class="col-1">
+                                                                <span class="g-gridcontent-item-text1">{{ \Illuminate\Support\Facades\Session::get('distance') }} km </span>
+                                                            </div>
+                                                            <div class="col-2">
+                                                                {{Form::label('vehicle', 'Vehiculo *', array('class' => 'hasPopover required'))}}
+                                                            </div>
+                                                            <div class="col-2">
+                                                                <a href="{{ url('services/create/coordinates') }}" class="button button-4 btn-danger">Cancelar</a>
+                                                            </div>
+                                                            <div class="col-2">
+                                                                <a href="{{ url('services/create/deliveries') }}" class="btn-success button button-4">Continar</a>
                                                             </div>
 
-
-                                                            <div style="width: 100% !important; display: inline-flex !important;">
-                                                                <div style="width: 25% !important; margin-right: 5px !important;">
-                                                                    {{Form::label('vehicle', 'Vehiculo *', array('class' => 'hasPopover required'))}}
-                                                                </div>
-                                                                <div style="width: 74% !important;">
-                                                                    <select name="vehicle" id="vehicle">
-                                                                        @foreach($vehicles as $vehicle)
-                                                                            <option value="{{$vehicle->id}}" data-type="{{$vehicle->travelMode}}">{{$vehicle->name}}</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <a href="#" class="button button-4">More</a>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="g-block size-50">
-                                <div id="infolist-3773-particle" class="g-content g-particle">
-                                    <div class="g-infolist g-1cols spaced noborder">
-
-
-                                        <div class="g-infolist-item ">
-
-
-                                            <div class="g-infolist-item-text g-infolist-textstyle-large">
-                                                <div class="g-infolist-item-title ">
-                                                    <div class="g-title-hero">
-                                                        <a href="#">
-                                                            Compras &nbsp; &nbsp; &nbsp;
-                                                        </a>
-                                                        <a href="#" style="right: 0px !important;" id="addChargeOthers">
-                                                            +
-                                                        </a>
-                                                    </div>
-                                                </div>
-
-                                                <div class="g-grid">
-                                                    <div class="g-block">
-                                                        <div class="g-content nomargintop nopaddingtop">
-                                                            <table id="chargesOthers">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>Compra</th>
-                                                                        <th>Precio</th>
-                                                                        <th>Eliminar</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -227,7 +179,7 @@
                                                                     {{Form::label('name', 'Nombre *', array('class' => 'hasPopover required'))}}
                                                                 </div>
                                                                 <div class="controls">
-                                                                    {{Form::text('name', $user->name,  array('required' => 'required', 'class' => 'required'))}}
+                                                                    {{Form::text('name', \Illuminate\Support\Facades\Auth::user()->name,  array('required' => 'required', 'class' => 'required'))}}
                                                                 </div>
                                                             </div>
                                                             <div class="control-group">
@@ -235,7 +187,7 @@
                                                                     {{Form::label('surnames', 'Apellidos *', array('class' => 'hasPopover required'))}}
                                                                 </div>
                                                                 <div class="controls">
-                                                                    {{Form::text('surnames', $user->surnames,  array('required' => 'required', 'class' => 'required'))}}
+                                                                    {{Form::text('surnames', \Illuminate\Support\Facades\Auth::user()->surnames,  array('required' => 'required', 'class' => 'required'))}}
                                                                 </div>
                                                             </div>
                                                             <div class="control-group">
@@ -243,7 +195,7 @@
                                                                     {{Form::label('phone', 'Teléfono *', array('class' => 'hasPopover required'))}}
                                                                 </div>
                                                                 <div class="controls">
-                                                                    {{Form::tel('phone', $user->phone,  array('required' => 'required', 'class' => 'required'))}}
+                                                                    {{Form::tel('phone', \Illuminate\Support\Facades\Auth::user()->phone,  array('required' => 'required', 'class' => 'required'))}}
                                                                 </div>
                                                             </div>
                                                             <div class="control-group">

@@ -1,4 +1,4 @@
-{{-- \resources\views\kind_persons\create.blade.php --}}
+{{-- \resources\views\services\create-coordinates.blade.php --}}
 @extends('layouts.app-map')
 
 @section('title', '| Servicios')
