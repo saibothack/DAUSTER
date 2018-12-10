@@ -1,3 +1,9 @@
+.container-map {
+    width: 100% !important;
+    height: 100% !important;
+    background-color: red;
+}
+
 @media only all and (min-width: 48rem) {
     .dir-ltr .g-offcanvas-toggle {
         margin-left: 5rem !important

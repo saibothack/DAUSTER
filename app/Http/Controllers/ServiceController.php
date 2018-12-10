@@ -152,4 +152,17 @@ class ServiceController extends Controller
     {
         //
     }
+
+    /*
+     * Inicializa la pantalla con el mapa para seleccionar
+     * los puntos para las entregas.
+     **/
+    public function coordinates() {
+        return view('services.create-coordinates');
+    }
+
+    public function charges() {}
+    public function deliveries() {}
+    public function payments() {}
+    public function tracking() {}
 }
