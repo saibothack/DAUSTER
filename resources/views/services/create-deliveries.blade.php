@@ -92,33 +92,27 @@
                                                             <div class="col-1">
                                                                 <span class="g-gridcontent-item-text1">Costo</span>
                                                             </div>
-                                                            <div class="col-3">
-                                                                <span class="g-gridcontent-item-text2" id="totalCost">
-                                                                    <div class="g-gridstatistic">
-                                                                        <div class="g-gridstatistic-wrapper g-gridstatistic-1cols">
-                                                                            <div class="g-gridstatistic-item" id="chargePrice">
-                                                                                <input type="hidden" id="chargeTotal" value="{{ \Illuminate\Support\Facades\Session::get('totalCost') }}">
-                                                                                <div class="g-gridstatistic-item-text1 odometer odometer-auto-theme" data-odometer-value="{{ \Illuminate\Support\Facades\Session::get('totalCost') }}" id="chargePriceDinamic">
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </span>
+                                                            <div class="col-2 text-center">
+                                                                <span class="g-gridcontent-item-text1" style="font-size: 20px;">${{ number_format(\Illuminate\Support\Facades\Session::get('service.total'), 2, '.', '') }}</span>
                                                             </div>
-                                                            <div class="col-1">
-                                                                <span class="g-gridcontent-item-text1">{{ \Illuminate\Support\Facades\Session::get('time') }} min </span>
+                                                            <div class="col-2 text-center">
+                                                                <span class="g-gridcontent-item-text1">Tiempo {{sprintf('%02d:%02d', (int) \Illuminate\Support\Facades\Session::get('service.time'), fmod(\Illuminate\Support\Facades\Session::get('service.time'), 1) * 60)}} min </span>
                                                             </div>
-                                                            <div class="col-1">
-                                                                <span class="g-gridcontent-item-text1">{{ \Illuminate\Support\Facades\Session::get('distance') }} km </span>
+                                                            <div class="col-2 text-right">
+                                                                <span class="g-gridcontent-item-text1">Distancia {{number_format(\Illuminate\Support\Facades\Session::get('service.distance'), 2, '.', '')}} km </span>
                                                             </div>
-                                                            <div class="col-2">
+                                                            <div class="col-2 text-center">
                                                                 {{Form::label('vehicle', 'Vehiculo *', array('class' => 'hasPopover required'))}}
                                                             </div>
-                                                            <div class="col-2">
-                                                                <a href="{{ url('services/create/coordinates') }}" class="button button-4 btn-danger">Cancelar</a>
-                                                            </div>
-                                                            <div class="col-2">
-                                                                <a href="{{ url('services/create/deliveries') }}" class="btn-success button button-4">Continar</a>
+                                                            <div class="col-3">
+                                                                <div class="row">
+                                                                    <div class="col-6 text-left">
+                                                                        <a href="{{ url('services/create/charges') }}" class="button button-4 btn-danger">Atras</a>
+                                                                    </div>
+                                                                    <div class="col-6 text-left">
+                                                                        <a href="{{ url('services/create/deliveries') }}" class="btn-success button button-4">Continar</a>
+                                                                    </div>
+                                                                </div>
                                                             </div>
 
                                                         </div>

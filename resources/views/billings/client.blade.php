@@ -237,7 +237,7 @@
 
 @section('scripts')
     <script src="{{asset('/js/billings/client.js')}}" type="text/javascript"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDNSjUu5ZcMxNVYAICYDbdYUQDfKos0KZE&callback=init&region=MX&libraries=places" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_KEY')}}&callback=init&region=MX&libraries=places" async defer></script>
 @endsection
 
 
