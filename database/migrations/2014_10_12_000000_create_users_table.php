@@ -57,6 +57,7 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('payment_methods');
         Schema::dropIfExists('addresses');
         Schema::dropIfExists('billings');
         Schema::dropIfExists('states');

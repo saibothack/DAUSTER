@@ -1,7 +1,7 @@
-{{-- \resources\views\kind_persons\create.blade.php --}}
+{{-- \resources\views\peyment_methods\index.blade.php --}}
 @extends('layouts.app')
 
-@section('title', '| Mi Perfil')
+@section('title', '| Mis metodos de pago')
 
 @section('content')
 
@@ -82,81 +82,65 @@
 
                                                             <div class="row">
                                                                 <div class="col-sm-12">
-                                                                    <h3>Mi dirección</h3>
-                                                                    <label>* Campos requeridos</label>
-                                                                </div>
-                                                            </div>
-
-                                                            @IF(isset($address))
-                                                                {{ Form::model($address, array('route' => array('address.update', $address->id), 'method' => 'PUT')) }}
-                                                            @ELSE
-                                                                {{ Form::open(array('url' => 'address')) }}
-                                                            @ENDIF
-
-                                                            <div class="form-group row">
-                                                                {{Form::label('street', 'Calle *', array('class' => 'col-sm-4 col-form-label text-right'))}}
-                                                                <div class="col-sm-7">
-                                                                    {{ Form::text('street', null, array('cla
-                                                                    ss' => 'form-control', 'required' => 'required')) }}
-                                                                </div>
-                                                                <div class="col-sm-1 text-left">
-                                                                    <button class="btn btn-primary" type="button" id="btnLocation">
-                                                                        <i class="fa fa-map-marker" aria-hidden="true"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group row">
-                                                                {{Form::label('exterior', 'No. Exterior *', array('class' => 'col-sm-4 col-form-label text-right'))}}
-                                                                <div class="col-sm-8">
-                                                                    {{ Form::text('exterior', null, array('class' => 'form-control', 'required' => 'required')) }}
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group row">
-                                                                {{Form::label('interior', 'No. Interior', array('class' => 'col-sm-4 col-form-label text-right'))}}
-                                                                <div class="col-sm-8">
-                                                                    {{ Form::text('interior', null, array('class' => 'form-control')) }}
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group row">
-                                                                {{Form::label('cp', 'C. P. *', array('class' => 'col-sm-4 col-form-label text-right'))}}
-                                                                <div class="col-sm-8">
-                                                                    {{ Form::number('cp', null, array('class' => 'form-control', 'required' => 'required', 'max' => '99999')) }}
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group row">
-                                                                {{Form::label('location', 'Localidad *', array('class' => 'col-sm-4 col-form-label text-right'))}}
-                                                                <div class="col-sm-8">
-                                                                    {{ Form::text('location', null, array('class' => 'form-control', 'required' => 'required')) }}
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group row">
-                                                                {{Form::label('countries_id', 'Pais *', array('class' => 'col-sm-4 col-form-label text-right'))}}
-                                                                <div class="col-sm-8">
-                                                                    {{Form::select('countries_id', $countries)}}
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group row">
-                                                                {{Form::label('states_id', 'Estado *', array('class' => 'col-sm-4 col-form-label text-right'))}}
-                                                                <div class="col-sm-8">
-                                                                    {{Form::select('states_id', $states)}}
+                                                                    <h3>Mis métodos de pago</h3>
                                                                 </div>
                                                             </div>
 
                                                             <div class="row">
-                                                                <div class="offset-sm-2 col-sm-2">
-                                                                    <button class="button btn-primary validate" type="submit">Modificar</button>
+                                                                <div class="col-2">
+                                                                    <a href="{{ URL::to('payment-methods/create') }}" class="button btn-primary validate">
+                                                                        Agregar
+                                                                    </a>
                                                                 </div>
+                                                            </div>
 
+                                                            <br>
+
+                                                            <table>
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>Métodos</th>
+                                                                    <th class="tdOptions">Opciones</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                @foreach ($paymentMethods as $paymentMethod)
+                                                                    <tr>
+                                                                        <td>
+                                                                            <div class="row">
+                                                                                <div class="col-2">
+                                                                                    <img src="{{ asset('images/' . $paymentMethods->type_card->icon) }}" alt="{{$typeCard->icon}}" width="32px">
+                                                                                </div>
+                                                                                <div class="col-2">
+                                                                                    {{ $paymentMethods->type_card->name }}
+                                                                                </div>
+                                                                                <div class="col-6 text-left">
+                                                                                    {{ $paymentMethods->card }}
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td class="tdOptions">
+                                                                            <div style="display: inline-flex;">
+                                                                                <a href="{{ URL::to('paymennt-methods/'.$paymentMethod->id.'/edit') }}" class="button button-grey button-2">
+                                                                                    <i class="fa fa-fw fa-edit"></i>
+                                                                                </a>
+
+                                                                                {!! Form::open(['method' => 'DELETE', 'route' => ['payment-methods.destroy', $paymentMethod->id] ]) !!}
+                                                                                <button class="button button-red button-2" type="submit">
+                                                                                    <i class="fa fa-fw fa-trash"></i>
+                                                                                </button>
+                                                                                {!! Form::close() !!}
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                            <div class="pagination">
+                                                                {{ $paymentMethods->links() }}
                                                             </div>
 
 
-                                                            {{ Form::close() }}
                                                         </div>
 
                                                         <div class="col-1">
@@ -165,8 +149,8 @@
                                                                 <div class="card-img-top" style="background-color: dimgrey">
                                                                     <div class="card-image-div">
                                                                         <a href="#">
-                                                                            @IF ($user->avatar != "")
-                                                                                <img  src="{{$user->avatar}}" alt="Perfil" class="card-image-profiler">
+                                                                            @IF (\Illuminate\Support\Facades\Auth::user()->avatar != "")
+                                                                                <img  src="{{\Illuminate\Support\Facades\Auth::user()->avatar}}" alt="Perfil" class="card-image-profiler">
                                                                             @ELSE
                                                                                 <img  src="{{asset('/images/profiler.png')}}" alt="Perfil" class="card-image-profiler">
                                                                             @ENDIF
@@ -174,8 +158,8 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="card-body" style="padding-top: 0px; ">
-                                                                    <h5 class="card-title">{{$user->name}} {{$user->surnames}}</h5>
-                                                                    <p class="card-text" style="font-size: 15px">{{$user->email}}</p>
+                                                                    <h5 class="card-title">{{\Illuminate\Support\Facades\Auth::user()->name}} {{\Illuminate\Support\Facades\Auth::user()->surnames}}</h5>
+                                                                    <p class="card-text" style="font-size: 15px">{{\Illuminate\Support\Facades\Auth::user()->email}}</p>
                                                                 </div>
 
                                                                 <div class="vertical-menu">
@@ -183,7 +167,6 @@
                                                                     <a href="{{ route('address.index') }}" class="active">Mi dirección</a>
                                                                     <a href="{{ route('billings.index') }}">Datos de facturación</a>
                                                                     <a href="{{ route('payment-methods.index') }}">Métodos de pago</a>
-
                                                                     <a href="{{ route('cards.index') }}">Eliminar mi cuenta</a>
                                                                 </div>
                                                             </div>

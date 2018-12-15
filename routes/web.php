@@ -25,6 +25,8 @@ Route::resource('permissions', 'PermissionController');
 Route::resource('vehicles', 'VehicleController');
 Route::resource('countries', 'CountryController');
 Route::resource('charges', 'ChargeController');
+Route::resource('payment-methods', 'PaymentMethodsController');
+Route::resource('type-cards', 'TypeCardController');
 
 //Ruta de servicios
 Route::resource('services', 'ServiceController');
@@ -35,6 +37,7 @@ Route::get('services/{id}/charges', 'ServiceController@charges');
 Route::get('services/{id}/deliveries', 'ServiceController@deliveries');
 Route::get('services/{id}/payments', 'ServiceController@payments');
 Route::get('services/{id}/tracking', 'ServiceController@tracking');
+
 
 
 Route::get('/change-password','UserController@changePassword');

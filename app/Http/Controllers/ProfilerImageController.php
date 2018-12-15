@@ -81,6 +81,8 @@ class ProfilerImageController extends Controller
         $file->move($destinationPath, $nameFile);
         $url = asset('images/'.$nameFile);
 
+
+
         $user = User::findOrFail(Auth::id());
         $data = array('img_vehicle' => $url);
         $user->fill($data)->save();

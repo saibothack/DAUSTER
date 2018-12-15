@@ -169,8 +169,7 @@
                                                                     <a href="{{ route('profilers.index') }}" class="active">Mis Datos</a>
                                                                     <a href="{{ route('address.index') }}">Mi dirección</a>
                                                                     <a href="{{ route('billings.index') }}">Datos de facturación</a>
-                                                                    <a href="{{ route('cards.index') }}">Mis tarjetas</a>
-
+                                                                    <a href="{{ route('payment-methods.index') }}">Métodos de pago</a>
                                                                     <a href="{{ route('cards.index') }}">Eliminar mi cuenta</a>
                                                                 </div>
                                                             </div>

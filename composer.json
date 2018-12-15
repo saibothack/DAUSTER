@@ -29,7 +29,8 @@
             "database/factories"
         ],
         "psr-4": {
-            "App\\": "app/"
+            "App\\": "app/",
+            "Paymetn\\": "vendor/payu-php-sdk-4.5.6/lib/"
         }
     },
     "autoload-dev": {
