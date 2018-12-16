@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Auth;
 use Mail;
 use App\User;
 use App\Mail\sendMail;
+use App\PaymentMethods;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -72,6 +72,17 @@ class RegisterController extends Controller
         $user = User::create($data->only('kindPerson', 'name', 'surnames', 'birthday', 'email', 'phone', 'password'));
         $data = array();
 
+        $dataPaymetUser = array(
+            'name' => 'Efectivo',
+            'card' => '',
+            'type_cards_id' => '3',
+            'users_id' => $user->id,
+            'token' => ''
+        );
+
+        $paymertUser = PaymentMethods::create($dataPaymetUser);
+        dd($paymertUser);
+
         if($data['kindPerson'] == 1) {
             $data = array(
                 'view' => 'mail.welcome',
@@ -88,7 +99,6 @@ class RegisterController extends Controller
                 'url' => $user->name,
                 'subject' => 'Registro de Empresa'
             );
-
         }
 
         Mail::to($data['mail'])->send(new sendMail($data));

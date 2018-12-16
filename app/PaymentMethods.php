@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PaymentMethods extends Model
 {
-    protected $fillable = ['name', 'card', 'type_cards_id', 'token', 'users_id', 'type_card'];
+    protected $fillable = ['name', 'card', 'type_cards_id', 'token', 'users_id', 'type_card', 'month', 'year'];
 
     public function scopeUserId($query, $search)
     {

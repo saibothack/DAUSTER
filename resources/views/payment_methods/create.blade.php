@@ -186,7 +186,9 @@
                                                                     <a href="{{ route('address.index') }}" >Mi dirección</a>
                                                                     <a href="{{ route('billings.index') }}">Datos de facturación</a>
                                                                     <a href="{{ route('payment-methods.index') }}" class="active">Métodos de pago</a>
-                                                                    <a href="{{ route('cards.index') }}">Eliminar mi cuenta</a>
+                                                                    {!! Form::open(['method' => 'DELETE', 'id' => 'frmDestroy', 'route' => ['users.destroy', \Illuminate\Support\Facades\Auth::id()] ]) !!}
+                                                                    <a href="#" onclick="document.getElementById('frmDestroy').submit();">Eliminar mi cuenta</a>
+                                                                    {!! Form::close() !!}
                                                                 </div>
                                                             </div>
                                                         </div>

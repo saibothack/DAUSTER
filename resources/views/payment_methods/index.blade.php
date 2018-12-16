@@ -109,29 +109,33 @@
                                                                         <td>
                                                                             <div class="row">
                                                                                 <div class="col-2">
-                                                                                    <img src="{{ asset('images/' . $paymentMethods->type_card->icon) }}" alt="{{$typeCard->icon}}" width="32px">
+                                                                                    <img src="{{ asset('images/' . $paymentMethod->type_card->icon) }}" alt="{{$paymentMethod->type_card->icon}}" width="32px">
                                                                                 </div>
-                                                                                <div class="col-2">
-                                                                                    {{ $paymentMethods->type_card->name }}
-                                                                                </div>
-                                                                                <div class="col-6 text-left">
-                                                                                    {{ $paymentMethods->card }}
+                                                                                @if ($paymentMethod->card == "")
+                                                                                    <div class="col-3">
+                                                                                        {{ $paymentMethod->type_card->name }}
+                                                                                    </div>
+                                                                                @endif
+                                                                                <div class="col-7 text-left">
+                                                                                    {{ $paymentMethod->card }}
                                                                                 </div>
                                                                             </div>
                                                                         </td>
-                                                                        <td class="tdOptions">
-                                                                            <div style="display: inline-flex;">
-                                                                                <a href="{{ URL::to('paymennt-methods/'.$paymentMethod->id.'/edit') }}" class="button button-grey button-2">
-                                                                                    <i class="fa fa-fw fa-edit"></i>
-                                                                                </a>
+                                                                        @if ($paymentMethod->type_card->id != 3)
+                                                                            <td class="tdOptions">
+                                                                                <div style="display: inline-flex;">
+                                                                                    <a href="{{ URL::to('payment-methods/'.$paymentMethod->id.'/edit') }}" class="button button-grey button-2">
+                                                                                        <i class="fa fa-fw fa-edit"></i>
+                                                                                    </a>
 
-                                                                                {!! Form::open(['method' => 'DELETE', 'route' => ['payment-methods.destroy', $paymentMethod->id] ]) !!}
-                                                                                <button class="button button-red button-2" type="submit">
-                                                                                    <i class="fa fa-fw fa-trash"></i>
-                                                                                </button>
-                                                                                {!! Form::close() !!}
-                                                                            </div>
-                                                                        </td>
+                                                                                    {!! Form::open(['method' => 'DELETE', 'route' => ['payment-methods.destroy', $paymentMethod->id] ]) !!}
+                                                                                    <button class="button button-red button-2" type="submit">
+                                                                                        <i class="fa fa-fw fa-trash"></i>
+                                                                                    </button>
+                                                                                    {!! Form::close() !!}
+                                                                                </div>
+                                                                            </td>
+                                                                        @endif
                                                                     </tr>
                                                                 @endforeach
                                                                 </tbody>
@@ -164,10 +168,12 @@
 
                                                                 <div class="vertical-menu">
                                                                     <a href="{{ route('profilers.index') }}" >Mis Datos</a>
-                                                                    <a href="{{ route('address.index') }}" class="active">Mi dirección</a>
+                                                                    <a href="{{ route('address.index') }}">Mi dirección</a>
                                                                     <a href="{{ route('billings.index') }}">Datos de facturación</a>
-                                                                    <a href="{{ route('payment-methods.index') }}">Métodos de pago</a>
-                                                                    <a href="{{ route('cards.index') }}">Eliminar mi cuenta</a>
+                                                                    <a href="{{ route('payment-methods.index') }}" class="active">Métodos de pago</a>
+                                                                    {!! Form::open(['method' => 'DELETE', 'id' => 'frmDestroy', 'route' => ['users.destroy', \Illuminate\Support\Facades\Auth::id()] ]) !!}
+                                                                    <a href="#" onclick="document.getElementById('frmDestroy').submit();">Eliminar mi cuenta</a>
+                                                                    {!! Form::close() !!}
                                                                 </div>
                                                             </div>
                                                         </div>

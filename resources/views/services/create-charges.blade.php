@@ -76,11 +76,19 @@
     </header>
 
     <section id="g-container-4634" class="g-wrapper">
+
         <div class="g-container">
+            <br>
+            <div class="row text-center">
+                <div class="col-md-12">
+                    @include ('errors.list') {{-- Including error file --}}
+                </div>
+            </div>
             <div class="g-grid">
                 <div class="g-block size-100">
                     <section id="g-mainbar">
                         <div class="g-grid">
+
                             <div class="g-block size-50">
                                 <div id="gridcontent-3925-particle" class="g-content g-particle">
                                     <div class="center">
@@ -110,6 +118,8 @@
                                                                 </div>
                                                             </div>
 
+                                                            <br>
+                                                            <br>
 
                                                             {{ Form::open(array('method' => 'post')) }}
                                                             <div style="width: 100% !important; display: inline-flex !important;">
@@ -118,6 +128,40 @@
                                                                 </div>
                                                                 <div style="width: 74% !important;">
                                                                     {{ Form::select('vehicle', $vehicles, $idVehicle, array("onchange" => "this.form.submit()")) }}
+                                                                </div>
+                                                            </div>
+                                                            {{ Form::close() }}
+
+                                                            <br>
+
+                                                            {{ Form::open(array('method' => 'post')) }}
+                                                            <div style="width: 100% !important; display: inline-flex !important;">
+                                                                <div style="width: 25% !important; margin-right: 5px !important;">
+                                                                    {{Form::label('paymentMethodId', 'Método de pago *', array('class' => 'hasPopover required'))}}
+                                                                </div>
+                                                                <div style="width: 74% !important;">
+                                                                    <select name="paymentMethodId" id="paymentMethodId" onchange="this.form.submit()">
+                                                                        <option value="">Seleccione</option>
+                                                                        @foreach($paymentMethods as $paymentMethod)
+                                                                            @if($idPaymentMethods == $paymentMethod->id)
+                                                                                <option value="{{$paymentMethod->id}}" data-thumbnail="{{asset('images/' . $paymentMethod->type_card->icon)}}" selected="selected">
+                                                                                    @if($paymentMethod->card != "")
+                                                                                        {{$paymentMethod->card}}
+                                                                                    @else
+                                                                                        {{$paymentMethod->name}}
+                                                                                    @endif
+                                                                                </option>
+                                                                            @else
+                                                                                <option value="{{$paymentMethod->id}}" data-thumbnail="{{asset('images/' . $paymentMethod->type_card->icon)}}">
+                                                                                    @if($paymentMethod->card != "")
+                                                                                        {{$paymentMethod->card}}
+                                                                                    @else
+                                                                                        {{$paymentMethod->name}}
+                                                                                    @endif
+                                                                                </option>
+                                                                            @endif
+                                                                        @endforeach
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                             {{ Form::close() }}

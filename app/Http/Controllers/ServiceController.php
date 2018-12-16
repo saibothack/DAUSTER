@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use Illuminate\Support\Facades\Session;
 use Mail;
 use App\Charge;
 use App\Service;
 use App\Vehicle;
-use App\Mail\sendMail;
+use App\TypeCard;
+use App\PaymentMethods;
 use Illuminate\Http\Request;
-use phpDocumentor\Reflection\DocBlock\Tags\Reference\Url;
+use Illuminate\Support\Facades\Session;
 
 class ServiceController extends Controller
 {
@@ -46,17 +46,36 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Session::has('service'))
+            return redirect('services/create/coordinates')
+            ->withErrors('Su sessión expiro por favor intentelo nuevamente.');
 
-    }
+        if (Session::get("service.paymentMethod") == "")
+            return redirect('services/create/charges')
+                ->withErrors('Seleccione un método de pago para poder continuar');
 
-    public function createStepTwo(Request $request)
-    {
+        $customMessages = [
+            'required' => 'El campo :attribute es obligatorio.',
+            'numeric' => 'El campo :attribute debe de ser un télefono valido.'
+        ];
 
-    }
+        $this->validate($request, [
+            'companyName' => 'required|string',
+            'name' => 'required|string',
+            'surnames' => 'required|string',
+            'phone' => 'required|numeric',
+            'packages' => 'required|int',
+            'companyNameDelivery' => 'required|string',
+            'nameDelivery' => 'required|string',
+            'surnamesDelivery' => 'required|string',
+            'phoneDelivery' => 'required|numeric',
+            'emailDelivery' => 'required|email',
+            'arrivalDescriptionDelivery' => 'required|string'
+        ], $customMessages);
 
-    public function createStepThree()
-    {
-        return view('services.create-step-three');
+        dd(Session::get('service'));
+
+
     }
 
     /**
@@ -119,16 +138,30 @@ class ServiceController extends Controller
      * */
     public function charges(Request $request, $id) {
         $vehicles = Vehicle::active()->pluck('name', 'id');
+        $paymentMethods = PaymentMethods::userId(Auth::id())->get();
+
+        foreach ($paymentMethods as $paymentMethod) {
+            $paymentMethod->type_card = TypeCard::find($paymentMethod->type_cards_id);
+        }
+
         $chargeOthers = array();
+
+        $idPaymentMethods = "";
 
         if (Session::has('service')) {
 
+            $idPaymentMethods = Session::get("service.paymentMethod");
             $idVehicle = Session::get("service.vehicle");
             $distance = Session::get("service.distance");
             $time = Session::get("service.time");
 
             if (Session::has("service.chargeOthers"))
                 $chargeOthers = Session::get("service.chargeOthers");
+
+            if (isset($request['paymentMethodId'])) {
+                $idPaymentMethods = $request['paymentMethodId'];
+                Session::put("service.paymentMethod", $idPaymentMethods);
+            }
 
             if (isset($request['vehicle'])) {
                 if ($idVehicle != intval($request['vehicle'])) {
@@ -189,12 +222,14 @@ class ServiceController extends Controller
             Session::put("service.distance", $distance);
             Session::put("service.time", $time);
             Session::put("service.coordinates", $coordinates);
+            Session::put("service.subtotal", $total);
             Session::put("service.total", $total);
             Session::put("service.vehicle", $idVehicle);
+            Session::put("service.paymentMethod", $idPaymentMethods);
         }
 
         return view('services.create-charges', compact('distance', 'time',
-            'total', 'vehicles', 'idVehicle', 'chargeOthers'));
+            'total', 'vehicles', 'idVehicle', 'chargeOthers', 'paymentMethods', 'idPaymentMethods'));
     }
 
     /**
@@ -204,10 +239,16 @@ class ServiceController extends Controller
         if (!Session::has('service'))
             return redirect('services/create/coordinates');
 
-        return view('services.create-deliveries');
+        if (Session::get("service.paymentMethod") == "")
+            return redirect('services/create/charges')
+                ->withErrors('Seleccione un método de pago para poder continuar');
+
+        $vehicle = Vehicle::findOrFail(Session()->get('service.vehicle', '0'));
+        return view('services.create-deliveries', compact('vehicle'));
 
 
     }
+
     public function payments() {}
     public function tracking() {}
 

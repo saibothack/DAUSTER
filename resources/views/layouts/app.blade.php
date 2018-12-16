@@ -20,6 +20,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.0.7/css/swiper.min.css" rel="stylesheet"/>
     <link href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet"/>
     <link href="{{asset('css/web.css')}}"  rel="stylesheet"/>
+    <link href="{{asset('css/bootstrap-select.css')}}"  rel="stylesheet"/>
     @yield('styles')
 
     <script class="joomla-script-options new" type="application/json">
@@ -28,11 +29,14 @@
     </script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <script src="{{asset('/web/media/system/js/mootools-core.js?1288e1d32bee104c1e3f27ec77aedf05')}}" type="text/javascript"></script>
     <script src="{{asset('/web/media/system/js/core.js?1288e1d32bee104c1e3f27ec77aedf05')}}" type="text/javascript"></script>
     <script src="{{asset('/web/templates/rt_kraken/js/swiper.js?5b90d7c0')}}" type="text/javascript"></script>
     <script src="{{asset('/web/templates/rt_kraken/js/odometer.js?5b90d7c0')}}" type="text/javascript"></script>
     <script src="{{asset('/js/web.js')}}" type="text/javascript"></script>
+    <script src="{{asset('/js/bootstrap-select.js')}}" type="text/javascript"></script>
 
     <!--[if (gte IE 8)&(lte IE 9)]>
     <script type="text/javascript" src="{{asset('/web/media/gantry5/assets/js/html5shiv-printshiv.min.js?5b90d7ad')}}" type="text/javascript"></script>

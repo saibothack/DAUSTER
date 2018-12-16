@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\PaymentMethods;
 use App\TypeCard;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Paymetn\PayU;
-use Paymetn\Environment;
-use Paymetn\SupportedLanguages;
-use Paymetn\PayUParameters;
+use App\PaymentMethods;
 use Paymetn\PayUTokens;
+use Paymetn\Environment;
+use Paymetn\PayUParameters;
+use Illuminate\Http\Request;
+use Paymetn\SupportedLanguages;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentMethodsController extends Controller
 {
 
     public function __construct() {
+        $this->middleware(['auth']);
         PayU::$apiKey = env('PAYU_KEY');
         PayU::$apiKey = env('PAYU_KEY');
         PayU::$apiLogin = env('PAYU_LOGIN');
@@ -41,7 +42,7 @@ class PaymentMethodsController extends Controller
         $paymentMethods = PaymentMethods::userId(Auth::id())->paginate(10);
 
         foreach ($paymentMethods as $paymentMethod) {
-            $paymentMethod->type_card = TypeCard::find($paymentMethod->type_card_id);
+            $paymentMethod->type_card = TypeCard::find($paymentMethod->type_cards_id);
         }
 
         return view('payment_methods.index', compact('paymentMethods'));
@@ -66,6 +67,100 @@ class PaymentMethodsController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'type_card_id' => 'required|int',
+            'name' => 'required|string',
+            'card' => 'required|string',
+            'month' => 'required|int',
+            'year' => 'required|int'
+        ]);
+
+        $token = "";
+        //$token = createToken($request);
+
+        $data = array(
+            'name' => $request['name'],
+            'card' => "####-####-####-" . substr($request['card'], 12, 4),
+            'type_cards_id' => $request['type_card_id'],
+            'token' => $token,
+            'users_id' => Auth::id(),
+            'month' => $request['month'],
+            'year' => $request['year']
+        );
+
+        PaymentMethods::create($data);
+
+        return redirect()->route('payment-methods.index')
+            ->with('flash_message',
+                'Se agrego su método de pago!');
+
+
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\PaymentMethods  $paymentMethods
+     * @return \Illuminate\Http\Response
+     */
+    public function show(PaymentMethods $paymentMethods)
+    {
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\PaymentMethods  $paymentMethods
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $paymentMethod = PaymentMethods::find($id);
+        $paymentMethod->type_card = TypeCard::find($paymentMethod->type_cards_id);
+
+        return view('payment_methods.edit', compact('paymentMethod'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\PaymentMethods  $paymentMethods
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'name' => 'required|string|max:255',
+            'month' => 'required|int',
+            'year' => 'required|int'
+        ]);
+
+        $paymenth = PaymentMethods::findOrFail($id);
+        $paymenth->fill($request->only('name', 'month', 'year'))->save();
+
+        return redirect()->route('payment-methods.index')
+            ->with('flash_message',
+                'Su registro fue modificado.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\PaymentMethods  $paymentMethods
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $payment = PaymentMethods::findOrFail($id);
+        $payment->delete();
+
+        return redirect()->route('payment-methods.index')
+            ->with('flash_message',
+                'Su registro fue eliminado.');
+    }
+
+    public function createToken(Request $request) {
         $token = "";
 
         $type_card = TypeCard::find($request['type_card_id']);
@@ -82,71 +177,15 @@ class PaymentMethodsController extends Controller
             //Ingrese aquí el nombre de la tarjeta de crédito
             PayUParameters::PAYMENT_METHOD => $type_card->code
         );
-            
+
         $response = PayUTokens::create($parameters);
 
         if($response){
             //podrás obtener el token de la tarjeta
-            $data = array(
-                'name' => $request['name'],
-                'card' => "####-####-####-" . substr($request['card'], 12, 4),
-                'type_cards_id' => $request['type_card_id'],
-                'token' => $response->creditCardToken->creditCardTokenId,
-                'users_id' => Auth::id(),
-            );
+            $token = $response->creditCardToken->creditCardTokenId;
 
-            PaymentMethods::create($data);
-
-            return redirect()->route('payment-methods.index')
-                ->with('flash_message',
-                    'Se agrego su método de pago!');
         }
 
-
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\PaymentMethods  $paymentMethods
-     * @return \Illuminate\Http\Response
-     */
-    public function show(PaymentMethods $paymentMethods)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\PaymentMethods  $paymentMethods
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(PaymentMethods $paymentMethods)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\PaymentMethods  $paymentMethods
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, PaymentMethods $paymentMethods)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\PaymentMethods  $paymentMethods
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(PaymentMethods $paymentMethods)
-    {
-        //
+        return $token;
     }
 }

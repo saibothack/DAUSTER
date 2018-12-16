@@ -10,6 +10,7 @@ use App\User;
 use App\Role;
 use App\KindPersons;
 use App\Mail\sendMail;
+use App\PaymentMethods;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -210,6 +211,16 @@ class UserController extends Controller
         $authUser = User::create($data);
 
         $authUser->assignRole('Cliente');
+
+        $dataPaymetUser = array(
+            'name' => 'Efectivo',
+            'card' => '',
+            'type_cards_id' => '3',
+            'users_id' => $authUser->id,
+            'token' => ''
+        );
+
+        PaymentMethods::create($dataPaymetUser);
 
         $data = array(
             'view' => 'mail.welcome',

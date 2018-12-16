@@ -34,3 +34,5 @@ public/images/.DS_Store
 \.idea/
 
 composer\.lock
+
+\.vscode/

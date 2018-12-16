@@ -1,7 +1,7 @@
 {{-- \resources\views\kind_persons\create.blade.php --}}
 @extends('layouts.app')
 
-@section('title', '| Cargos')
+@section('title', '| Mi Perfil')
 
 @section('content')
 
@@ -32,7 +32,7 @@
                                 <div class="g-infolist-item ">
                                     <div class="g-infolist-item-text g-infolist-textstyle-header">
                                         <div class="g-infolist-item-title ">
-                                            Modificar cargo
+                                            Mi Perfil
                                         </div>
                                     </div>
 
@@ -71,17 +71,25 @@
                                                     @endif
 
                                                     <div class="row">
-                                                        <div class="col-md-8 col-md-offset-2">
-                                                            @include ('errors.list') {{-- Including error file --}}
-                                                        </div>
-                                                    </div>
+                                                        <div class="col-10">
+                                                            <div class="row">
+                                                                <div class="col-md-10 col-md-offset-2">
+                                                                    @include ('errors.list') {{-- Including error file --}}
+                                                                </div>
+                                                            </div>
 
-                                                    <br>
+                                                            <br>
 
-                                                    {{ Form::model($charge, array('route' => array('charges.update', $charge->id), 'method' => 'PUT', 'class' => 'form-validate form-horizontal well')) }}
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <h3>Mi dirección</h3>
+                                                                    <label>* Campos requeridos</label>
+                                                                </div>
+                                                            </div>
 
-                                                        <fieldset>
-                                                                <legend>Modificar</legend>
+                                                            {{ Form::model($paymentMethod, array('route' => array('payment-methods.update', $paymentMethod->id), 'method' => 'PUT', 'class' => 'form-validate form-horizontal well')) }}
+                                                            <fieldset>
+                                                                <legend>Agregar</legend>
                                                                 <div class="control-group field-spacer">
                                                                     <div class="control-label" style="width: 100% !important; text-align: left !important;">
                                                                         <span class="spacer">
@@ -98,14 +106,6 @@
                                                                 <br>
                                                                 <div class="control-group">
                                                                     <div class="control-label">
-                                                                        {{Form::label('vehicles', 'Vehículo *', array('class' => 'hasPopover required'))}}
-                                                                    </div>
-                                                                    <div class="controls">
-                                                                        {{Form::select('vehicles', $vehicles)}}
-                                                                    </div>
-                                                                </div>
-                                                                <div class="control-group">
-                                                                    <div class="control-label">
                                                                         {{Form::label('name', 'Nombre *', array('class' => 'hasPopover required'))}}
                                                                     </div>
                                                                     <div class="controls">
@@ -114,20 +114,79 @@
                                                                 </div>
                                                                 <div class="control-group">
                                                                     <div class="control-label">
-                                                                        {{Form::label('charge', 'Precio *', array('class' => 'hasPopover required'))}}
+                                                                        {{Form::label('card', 'Núero de tarjeta*', array('class' => 'hasPopover required'))}}
                                                                     </div>
                                                                     <div class="controls">
-                                                                        {{Form::number('charge', null,  array('required' => 'required', 'class' => 'required'))}}
+                                                                        <div class="row">
+                                                                            <div class="col-10">
+                                                                                {{Form::text('card', null,  array('required' => 'required', 'class' => 'required', 'readonly' => 'readonly'))}}
+                                                                            </div>
+                                                                            <div class="col-2 text-right">
+                                                                                <div class="row">
+                                                                                    <div class="col-12" id="icon_default">
+                                                                                        <img src="{{ asset('images/' . $paymentMethod->type_card->icon) }}" alt="{{asset('images/' . $paymentMethod->type_card->icon)}}" width="32px">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="control-group">
+                                                                    <div class="control-label">
+                                                                        {{Form::label('expirationDate', 'Fecha de Expiración *', array('class' => 'hasPopover required'))}}
+                                                                    </div>
+                                                                    <div class="controls">
+                                                                        <div class="row">
+                                                                            <div class="col-3">
+                                                                                {{Form::number('month', null,  array('required' => 'required', 'class' => 'required', 'placeholder' => 'MM', 'max' => '12'))}}
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                {{Form::number('year', null,  array('required' => 'required', 'class' => 'required', 'placeholder' => 'YYYY', 'max' => '9999'))}}
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </fieldset>
                                                             <div class="control-group">
                                                                 <div class="controls">
-                                                                    <button class="button btn-primary validate" type="submit">Continuar
+                                                                    <button class="button btn-primary validate" type="submit">Agregar
                                                                     </button>
                                                                 </div>
                                                             </div>
-                                                    {{ Form::close() }}
+                                                            {{ Form::close() }}
+                                                        </div>
+
+                                                        <div class="col-1">
+                                                            <br>
+                                                            <div class="card" style="width: 15rem;">
+                                                                <div class="card-img-top" style="background-color: dimgrey">
+                                                                    <div class="card-image-div">
+                                                                        <a href="#">
+                                                                            @IF (\Illuminate\Support\Facades\Auth::user()->avatar != "")
+                                                                                <img  src="{{\Illuminate\Support\Facades\Auth::user()->avatar}}" alt="Perfil" class="card-image-profiler">
+                                                                            @ELSE
+                                                                                <img  src="{{asset('/images/profiler.png')}}" alt="Perfil" class="card-image-profiler">
+                                                                            @ENDIF
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card-body" style="padding-top: 0px; ">
+                                                                    <h5 class="card-title">{{\Illuminate\Support\Facades\Auth::user()->name}} {{\Illuminate\Support\Facades\Auth::user()->surnames}}</h5>
+                                                                    <p class="card-text" style="font-size: 15px">{{\Illuminate\Support\Facades\Auth::user()->email}}</p>
+                                                                </div>
+
+                                                                <div class="vertical-menu">
+                                                                    <a href="{{ route('profilers.index') }}" >Mis Datos</a>
+                                                                    <a href="{{ route('address.index') }}" >Mi dirección</a>
+                                                                    <a href="{{ route('billings.index') }}">Datos de facturación</a>
+                                                                    <a href="{{ route('payment-methods.index') }}" class="active">Métodos de pago</a>
+                                                                    {!! Form::open(['method' => 'DELETE', 'id' => 'frmDestroy', 'route' => ['users.destroy', \Illuminate\Support\Facades\Auth::id()] ]) !!}
+                                                                    <a href="#" onclick="document.getElementById('frmDestroy').submit();">Eliminar mi cuenta</a>
+                                                                    {!! Form::close() !!}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -143,7 +202,7 @@
 
             </div>
         </div>
-
     </section>
 
 @endsection
+

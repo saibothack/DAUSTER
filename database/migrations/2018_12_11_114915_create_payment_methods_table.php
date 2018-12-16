@@ -27,6 +27,8 @@ class CreatePaymentMethodsTable extends Migration
             $table->string('name');
             $table->string('card');
             $table->string('token');
+            $table->bigInteger('month')->nullable();
+            $table->bigInteger('year')->nullable();
             $table->unsignedInteger('type_cards_id')->nullable();
             $table->foreign('type_cards_id')
                 ->references('id')
