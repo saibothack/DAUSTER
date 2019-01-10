@@ -13,15 +13,6 @@ class CreatePaymentMethodsTable extends Migration
      */
     public function up()
     {
-        Schema::create('type_cards', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('icon');
-            $table->string('code');
-            $table->boolean('active')->default('1');
-            $table->timestamps();
-        });
-
         Schema::create('payment_methods', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
@@ -51,6 +42,5 @@ class CreatePaymentMethodsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('payment_methods');
-        Schema::dropIfExists('type_cards');
     }
 }

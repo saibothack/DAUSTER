@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateServicesCoordinatesTable extends Migration
+class CreateMessagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class CreateServicesCoordinatesTable extends Migration
      */
     public function up()
     {
-        Schema::create('services_coordinates', function (Blueprint $table) {
+        Schema::create('messages', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->text('message');
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ class CreateServicesCoordinatesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('services_coordinates');
+        Schema::dropIfExists('messages');
     }
 }

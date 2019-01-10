@@ -29,6 +29,7 @@ class Permission extends \Spatie\Permission\Models\Permission
             'Mi perfil',
             'Facturas',
             'Estados',
+            'Tipo de Tarjetas'
         ];
     }
 }

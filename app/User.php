@@ -7,12 +7,14 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
+use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     use Notifiable;
     use HasRoles;
+    use HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -50,5 +52,15 @@ class User extends Authenticatable
                 ->orWhere('email', 'like', "%$search%")
                 ->orWhere('phone', 'like', "%$search%");
         }
+    }
+
+    /**
+     * A user can have many messages
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
     }
 }

@@ -114,7 +114,7 @@
                                                                 </div>
                                                                 <div class="control-group">
                                                                     <div class="control-label">
-                                                                        {{Form::label('card', 'Núero de tarjeta*', array('class' => 'hasPopover required'))}}
+                                                                        {{Form::label(' ', 'Núero de tarjeta*', array('class' => 'hasPopover required'))}}
                                                                     </div>
                                                                     <div class="controls">
                                                                         <div class="row">

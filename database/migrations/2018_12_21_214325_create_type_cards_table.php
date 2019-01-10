@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCondicionesTable extends Migration
+class CreateTypeCardsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class CreateCondicionesTable extends Migration
      */
     public function up()
     {
-        Schema::create('condiciones', function (Blueprint $table) {
+        Schema::create('type_cards', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name');
+            $table->string('icon');
+            $table->string('code');
+            $table->boolean('active')->default('1');
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ class CreateCondicionesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('condiciones');
+        Schema::dropIfExists('type_cards');
     }
 }

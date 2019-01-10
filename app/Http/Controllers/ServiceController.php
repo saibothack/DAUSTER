@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\ServiceCoordinates;
+use App\ServiceDelivery;
+use App\ServiceOthersCharge;
 use Auth;
 use Mail;
 use App\Charge;
@@ -73,9 +76,104 @@ class ServiceController extends Controller
             'arrivalDescriptionDelivery' => 'required|string'
         ], $customMessages);
 
-        dd(Session::get('service'));
+        //dd($request->all());
+        $service = $this->createService();
+        $this->saveOtherCharges($service);
+        $this->createCoordinates($service);
+        $this->createDelivery($request, $service);
 
 
+    }
+
+    /**
+     * Crea el servicio
+     */
+    public function createService() {
+        $dataService = array(
+            'distance' => Session::get('service.distance'),
+            'time' => Session::get('service.time'),
+            'subtotal' => Session::get('service.subtotal'),
+            'total' => Session::get('service.total'),
+            'vehicles_id' => Session::get('service.vehicle'),
+            'paymentMethods_id' => Session::get('service.paymentMethod'),
+            'users_id' => Auth::id()
+        );
+
+        $service = Service::create($dataService);
+
+        return $service;
+    }
+
+    public function saveOtherCharges($service) {
+        $charges = Session::get('service.chargeOthers');
+
+        foreach($charges as $charge) {
+            if ($charge['chargeOthersDescription']) {
+                $data = array(
+                    'name' => $charge['chargeOthersName'],
+                    'price' => $charge['chargeOthersPrice'],
+                    'description' => $charge['chargeOthersDescription'],
+                    'service_id' => $service->id
+                );
+            } else {
+                $data = array(
+                    'name' => $charge['chargeOthersName'],
+                    'price' => $charge['chargeOthersPrice'],
+                    'services_id' => $service->id
+                );
+            }
+
+            ServiceOthersCharge::create($data);
+        }
+    }
+
+    public function createCoordinates($service) {
+        $coordinates = json_decode (Session::get('service.coordinates'));
+
+        $order = 1;
+        foreach($coordinates as $coordinate) {
+            $date = array(
+                'lat' => $coordinate->{'lat'},
+                'lng' => $coordinate->{'lat'},
+                'orden' => $order,
+                'services_id' => $service->id,
+            );
+
+            ServiceCoordinates::create($date);
+
+            $order++;
+        }
+    }
+
+    public function createDelivery($request, $service) {
+
+        $orden = 1;
+        $data = array(
+            'companyName' => $request['companyName'],
+            'name' => $request['name'],
+            'surnames' => $request['surnames'],
+            'phone' => $request['phone'],
+            'packages' => $request['packages'],
+            'description' => $request['description'],
+            'orden' => $orden,
+            'services_id' => $service->id
+        );
+
+        ServiceDelivery::create($data);
+
+        $orden++;
+        $data = array(
+            'companyName' => $request['companyNameDelivery'],
+            'name' => $request['nameDelivery'],
+            'surnames' => $request['surnamesDelivery'],
+            'phone' => $request['phoneDelivery'],
+            'email' => $request['emailDelivery'],
+            'description' => $request['arrivalDescriptionDelivery'],
+            'orden' => $orden,
+            'services_id' => $service->id
+        );
+
+        ServiceDelivery::create($data);
     }
 
     /**
