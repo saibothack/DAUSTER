@@ -25,6 +25,11 @@ class UserController extends Controller
     public function login(Request $request){
         if(Auth::attempt(['email' => $request['email'], 'password' => $request['password']])){
             $user = Auth::user();
+
+            if (!$user->hasRole("Cliente")) {
+                $this->Unauthorized();
+            }
+
             $success['token'] =  $user->createToken('MyApp')-> accessToken;
             $nextStep = 1;
 
@@ -44,14 +49,48 @@ class UserController extends Controller
         }
         else{
 
+            $this->Unauthorized();
+        }
+    }
+
+    public function loginDriver(Request $request){
+        if(Auth::attempt(['email' => $request['email'], 'password' => $request['password']])){
+            $user = Auth::user();
+            if (!$user->hasRole("Conductor")) {
+                $this->Unauthorized();
+            }
+
+            $success['token'] =  $user->createToken('MyApp')-> accessToken;
+            $nextStep = 1;
+
+            if (Address::where('users_id', $user->id)->count() == 0)
+                $nextStep = 3;
+
+            if (Billing::where('users_id', $user->id)->count() == 0)
+                $nextStep = 4;
+
             $data = array(
-                'success' => false,
-                'error' => 'Unauthorised',
-                'token' => ''
+                'success' => true,
+                'token' => $success['token'],
+                'nextStep' => $nextStep
             );
 
-            return response()->json($data, 401);
+            return response()->json($data, $this-> successStatus);
         }
+        else{
+
+            $this->Unauthorized();
+        }
+    }
+
+    public function Unauthorized() {
+        $data = array(
+            'success' => false,
+            'error' => 'Unauthorized',
+            'token' => ''
+        );
+
+        return response()->json($data, 401);
     }
 
     /**
@@ -127,6 +166,51 @@ class UserController extends Controller
         return response()->json($data, $this->successStatus);
     }
 
+    public function registerDriver(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'surnames' => 'required|string|max:255',
+            'birthday' => 'required|date|max:255',
+            'email' => 'required|email|unique:users',
+            'phone' => 'required|string|max:255',
+            'password'=>'required|min:6|confirmed',
+            'vehicles_id'=>'required|int',
+            'current_work_id'=>'required|int',
+            'data_plan'=>'required|int'
+        ]);
+
+        if ($validator->fails()) {
+            $data = array(
+                'success' => false,
+                'error' => $validator->errors(),
+                'token' => '',
+                'nextStep' => 0
+            );
+
+            return response()->json($data, 400);
+        }
+
+        $data = $request->only('name', 'surnames', 'birthday', 'email', 'phone',
+            'password', 'vehicles_id', 'current_work_id', 'data_plan');
+        $data["'kind_persons_id'"] = 2;
+        $data["authorized"] = 0;
+        $data["role"] = 3;
+
+        $user = User::create($data);
+
+        $data = array(
+            'view' => 'email.welcome_drive',
+            'mail' => $user->email,
+            'name' => $user->name,
+            'subject' => 'Registro de Usuario'
+        );
+
+        Mail::to($data['mail'])->send(new sendMail($data));
+
+        return response()->json(null, 204);
+    }
+
     /**
      * Register api
      *
@@ -198,11 +282,11 @@ class UserController extends Controller
 
         Address::create($data);
 
-        $data = array(
+        /*$data = array(
             'success' => true,
             'error' => '',
             'nextStep' => $red
-        );
+        );*/
 
         return response()->json($data, $this->successStatus);
     }

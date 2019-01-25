@@ -93,6 +93,11 @@ class PaymentMethodsController extends Controller
         );
 
         return response()->json($data, $this->successStatus);
+    }
 
+    public function delete($id) {
+        $paymentMethods = PaymentMethods::findOrFail($id);
+        $paymentMethods->delete();
+        return 204;
     }
 }
